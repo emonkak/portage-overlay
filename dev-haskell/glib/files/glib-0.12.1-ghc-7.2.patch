@@ -1,0 +1,98 @@
+diff --git a/System/Glib/UTFString.hs b/System/Glib/UTFString.hs
+index de54d16..1758414 100644
+--- a/System/Glib/UTFString.hs
++++ b/System/Glib/UTFString.hs
+@@ -1,3 +1,4 @@
++{-# LANGUAGE CPP #-}
+ --  GIMP Toolkit (GTK) UTF aware string marshalling
+ --
+ --  Author : Axel Simon
+@@ -55,46 +56,78 @@ import System.Glib.FFI
+ -- | Like 'withCString' but using the UTF-8 encoding.
+ --
+ withUTFString :: String -> (CString -> IO a) -> IO a
++#if __GLASGOW_HASKELL__ < 702
+ withUTFString hsStr = withCAString (toUTF hsStr)
++#else
++withUTFString hsStr = withCString hsStr
++#endif
+ 
+ -- | Like 'withCStringLen' but using the UTF-8 encoding.
+ --
+ withUTFStringLen :: String -> (CStringLen -> IO a) -> IO a
++#if __GLASGOW_HASKELL__ < 702
+ withUTFStringLen hsStr = withCAStringLen (toUTF hsStr)
++#else
++withUTFStringLen hsStr = withCStringLen hsStr
++#endif
+ 
+ -- | Like 'newCString' but using the UTF-8 encoding.
+ --
+ newUTFString :: String -> IO CString
++#if __GLASGOW_HASKELL__ < 702
+ newUTFString = newCAString . toUTF
++#else
++newUTFString = newCString
++#endif
+ 
+ -- | Like  Define newUTFStringLen to emit UTF-8.
+ --
+ newUTFStringLen :: String -> IO CStringLen
++#if __GLASGOW_HASKELL__ < 702
+ newUTFStringLen = newCAStringLen . toUTF
++#else
++newUTFStringLen = newCStringLen
++#endif
+ 
+ -- | Like 'peekCString' but using the UTF-8 encoding.
+ --
+ peekUTFString :: CString -> IO String
++#if __GLASGOW_HASKELL__ < 702
+ peekUTFString strPtr = liftM fromUTF $ peekCAString strPtr
++#else
++peekUTFString strPtr = peekCString strPtr
++#endif
+ 
+ -- | Like 'maybePeek' 'peekCString' but using the UTF-8 encoding to retrieve
+ -- UTF-8 from a 'CString' which may be the 'nullPtr'.
+ --
+ maybePeekUTFString :: CString -> IO (Maybe String)
++#if __GLASGOW_HASKELL__ < 702
+ maybePeekUTFString strPtr = liftM (maybe Nothing (Just . fromUTF)) $ maybePeek peekCAString strPtr
++#else
++maybePeekUTFString strPtr = maybePeek peekCString strPtr
++#endif
+ 
+ -- | Like 'peekCStringLen' but using the UTF-8 encoding.
+ --
+ peekUTFStringLen :: CStringLen -> IO String
++#if __GLASGOW_HASKELL__ < 702
+ peekUTFStringLen strPtr = liftM fromUTF $ peekCAStringLen strPtr
++#else
++peekUTFStringLen strPtr = peekCStringLen strPtr
++#endif
+ 
+ -- | Like like 'peekUTFString' but then frees the string using g_free
+ --
+ readUTFString :: CString -> IO String
++#if __GLASGOW_HASKELL__ < 702
+ readUTFString strPtr = do
+   str <- peekUTFString strPtr
+   g_free strPtr
+   return str
++#else
++readUTFString strPtr = readCString strPtr
++#endif
+ 
+ -- | Like 'peekCString' but then frees the string using @g_free@.
+ --
+@@ -119,6 +152,9 @@ withUTFStrings hsStrs = withUTFStrings' hsStrs []
+ -- | Temporarily allocate an array of UTF-8 encoded 'CString's.
+ --
+ withUTFStringArray :: [String] -> (Ptr CString -> IO a) -> IO a
++#if __GLASGOW_HASKELL__ < 702
++#else
++#endif
+ withUTFStringArray hsStr body =
+   withUTFStrings hsStr $ \cStrs -> do
+   withArray cStrs body

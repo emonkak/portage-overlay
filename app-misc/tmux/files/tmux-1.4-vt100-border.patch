@@ -1,0 +1,24 @@
+diff -ur tmux-1.4.orig/tty-acs.c tmux-1.4/tty-acs.c
+--- tmux-1.4.orig/tty-acs.c	2010-09-19 00:43:53.000000000 +0900
++++ tmux-1.4/tty-acs.c	2011-05-21 16:26:44.263937939 +0900
+@@ -81,7 +81,7 @@
+ 	struct tty_acs_entry *entry;
+ 
+ 	/* If not a UTF-8 terminal, use the ACS set. */
+-	if (!(tty->flags & TTY_UTF8)) {
++	if (1) {
+ 		if (tty->term->acs[ch][0] == '\0')
+ 			return (NULL);
+ 		return (&tty->term->acs[ch][0]);
+diff -ur tmux-1.4.orig/tty.c tmux-1.4/tty.c
+--- tmux-1.4.orig/tty.c	2010-12-07 06:57:56.000000000 +0900
++++ tmux-1.4/tty.c	2011-05-21 16:23:06.310937851 +0900
+@@ -47,7 +47,7 @@
+ 	    const struct grid_cell *, const struct grid_utf8 *);
+ 
+ #define tty_use_acs(tty) \
+-	(tty_term_has(tty->term, TTYC_ACSC) && !((tty)->flags & TTY_UTF8))
++	(tty_term_has(tty->term, TTYC_ACSC))
+ 
+ void
+ tty_init(struct tty *tty, int fd, char *term)

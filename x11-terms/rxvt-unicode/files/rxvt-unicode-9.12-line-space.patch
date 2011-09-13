@@ -1,0 +1,132 @@
+diff --git a/src/rxvtfont.C b/src/rxvtfont.C
+index d0578d8..a7368cf 100644
+--- a/src/rxvtfont.C
++++ b/src/rxvtfont.C
+@@ -28,6 +28,8 @@
+ 
+ #include <inttypes.h>
+ 
++#include <math.h>
++
+ #if XFT
+ # include <fontconfig/fontconfig.h>
+ #endif
+@@ -1050,10 +1052,16 @@ rxvt_font_x11::draw (rxvt_drawable &d, int x, int y,
+ 
+   int base = ascent; // sorry, incorrect: term->fbase;
+ 
++  if (term->lineSpace != 0)
++    base += ceil(term->lineSpace / 2 + 0.5);
++
+   XGCValues v;
+   v.foreground = term->pix_colors[fg];
+   v.font = f->fid;
+ 
++  int w = term->fwidth * len;
++  int h = term->fheight;
++
+   if (enc2b)
+     {
+       const XChar2b *xc = enc_xchar2b (text, len, cs, slow);
+@@ -1061,30 +1069,28 @@ rxvt_font_x11::draw (rxvt_drawable &d, int x, int y,
+       if (bg == Color_bg && !slow)
+         {
+           v.background = term->pix_colors[bg];
+-          XChangeGC (disp, gc, GCForeground | GCBackground | GCFont, &v);
+-          XDrawImageString16 (disp, d, gc, x, y + base, xc, len);
++          XChangeGC (disp, gc, GCBackground, &v);
++          XFillRectangle (disp, d, gc, x, y, w, h);
+         }
+-      else
+-        {
+-          clear_rect (d, x, y, term->fwidth * len, term->fheight, bg);
+ 
+-          XChangeGC (disp, gc, GCForeground | GCFont, &v);
++      clear_rect (d, x, y, w, h, bg);
++
++      XChangeGC (disp, gc, GCForeground | GCFont, &v);
+ 
+-          if (slow)
++      if (slow)
++        {
++          do
+             {
+-              do
+-                {
+-                  if (xc->byte1 || xc->byte2)
+-                    XDrawString16 (disp, d, gc, x, y + base, xc, 1);
++              if (xc->byte1 || xc->byte2)
++                XDrawString16 (disp, d, gc, x, y + base, xc, 1);
+ 
+-                  x += term->fwidth;
+-                  xc++; len--;
+-                }
+-              while (len);
++              x += term->fwidth;
++              xc++; len--;
+             }
+-          else
+-            XDrawString16 (disp, d, gc, x, y + base, xc, len);
++          while (len);
+         }
++      else
++        XDrawString16 (disp, d, gc, x, y + base, xc, len);
+     }
+   else
+     {
+@@ -1093,30 +1099,28 @@ rxvt_font_x11::draw (rxvt_drawable &d, int x, int y,
+       if (bg == Color_bg && !slow)
+         {
+           v.background = term->pix_colors[bg];
+-          XChangeGC (disp, gc, GCForeground | GCBackground | GCFont, &v);
+-          XDrawImageString (disp, d, gc, x, y + base, xc, len);
++          XChangeGC (disp, gc, GCBackground, &v);
++          XFillRectangle (disp, d, gc, x, y, w, h);
+         }
+-      else
+-        {
+-          clear_rect (d, x, y, term->fwidth * len, term->fheight, bg);
+ 
+-          XChangeGC (disp, gc, GCForeground | GCFont, &v);
++      clear_rect (d, x, y, w, h, bg);
++
++      XChangeGC (disp, gc, GCForeground | GCFont, &v);
+ 
+-          if (slow)
++      if (slow)
++        {
++          do
+             {
+-              do
+-                {
+-                  if (*xc)
+-                    XDrawString (disp, d, gc, x, y + base, xc, 1);
++              if (*xc)
++                XDrawString (disp, d, gc, x, y + base, xc, 1);
+ 
+-                  x += term->fwidth;
+-                  xc++; len--;
+-                }
+-              while (len);
++              x += term->fwidth;
++              xc++; len--;
+             }
+-          else
+-            XDrawString (disp, d, gc, x, y + base, xc, len);
++          while (len);
+         }
++      else
++        XDrawString (disp, d, gc, x, y + base, xc, len);
+     }
+ }
+ 
+@@ -1395,6 +1399,9 @@ rxvt_font_xft::draw (rxvt_drawable &d, int x, int y,
+           ep->x = x_ + (cwidth - extents.xOff >> 1);
+           ep->y = y_ + ascent;
+ 
++          if (term->lineSpace != 0)
++            ep->y += ceil(term->lineSpace / 2 + 0.5);
++
+           if (extents.xOff == 0)
+             ep->x = x_ + cwidth;
+ 

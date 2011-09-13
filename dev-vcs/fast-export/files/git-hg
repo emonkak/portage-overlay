@@ -1,0 +1,90 @@
+#!/bin/bash
+
+set -e
+
+function git-current-branch {
+    git branch | egrep '^[*]' | sed 's/^\* \(.\)/\1/'
+}
+
+function git-hg-clone {
+    HG_REMOTE=$1
+    if [ -z "$2" ]; then
+        CHECKOUT=$(basename $1)
+    else
+        CHECKOUT=$2
+    fi
+    if [ -a $CHECKOUT ]; then
+	echo error: $CHECKOUT exists
+	exit 1
+    fi
+    git init $CHECKOUT
+    (
+	cd $CHECKOUT
+	hg clone -U $HG_REMOTE .git/hgcheckout
+	git init --bare .git/hgremote
+	(
+	    cd .git/hgremote
+	    hg-fast-export -r ../hgcheckout
+	)
+	git remote add hg .git/hgremote
+	git fetch hg
+	git pull hg master
+    )
+}
+
+function git-hg-fetch {
+    hg -R .git/hgcheckout pull
+    (
+	cd .git/hgremote
+	hg-fast-export
+    )
+    git fetch hg
+}
+
+function git-hg-pull {
+    git-hg-fetch
+    git merge hg/$(git-current-branch)
+}
+
+function git-hg-checkout {
+    git-hg-fetch
+    git checkout hg/$1 -b $1
+}
+
+function git-hg-push {
+    HG_REPO=$1
+    hg convert . .git/hgcheckout
+    hg -R .git/hgcheckout push $HG_REPO
+}
+
+function usage {
+    echo "To clone a mercurial repo run:"
+    echo "  clone <path/to/mercurial/repo> [local_checkout_path]"
+    echo ""
+    echo "To work with a cloned mercurial repo use: "
+    echo "  fetch                   fetch latest branches from mercurial"
+    echo "  pull                    fetch and merge the into the current branch"
+    echo "  checkout branch_name    checkout a mercurial branch"
+}
+
+case "$1" in
+    clone)
+	git-hg-clone $2 $3
+	;;
+    fetch)
+	git-hg-fetch
+	;;
+    pull)
+	git-hg-pull
+	;;
+    checkout)
+	git-hg-checkout $2
+	;;
+    push)
+        git-hg-push $2
+        ;;
+    *)
+	usage
+	exit 1
+	;;
+esac

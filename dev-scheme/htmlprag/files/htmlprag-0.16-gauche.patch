@@ -1,0 +1,47 @@
+--- htmlprag-0-16.scm.orig	2010-12-29 16:50:20.251364770 +0900
++++ htmlprag-0-16.scm	2010-12-29 16:49:50.691364771 +0900
+@@ -20,6 +20,35 @@
+ ;;; other license options and consulting, contact the author.
+ ;;; @end legal
+ 
++(define-module htmlprag
++  (export shtml-comment-symbol)
++  (export shtml-decl-symbol)
++  (export shtml-empty-symbol)
++  (export shtml-end-symbol)
++  (export shtml-entity-symbol)
++  (export shtml-pi-symbol)
++  (export shtml-start-symbol)
++  (export shtml-text-symbol)
++  (export shtml-top-symbol)
++  (export shtml-named-char-id)
++  (export shtml-numeric-char-id)
++  (export make-shtml-entity)
++  (export shtml-entity-value)
++  (export make-html-tokenizer)
++  (export tokenize-html)
++  (export shtml-token-kind)
++  (export parse-html/tokenizer)
++  (export html->sxml-0nf)
++  (export html->sxml-1nf)
++  (export html->sxml-2nf)
++  (export html->sxml)
++  (export html->shtml)
++  (export write-shtml-as-html)
++  (export shtml->html)
++)
++
++(select-module htmlprag)
++
+ (define-syntax %htmlprag:testeez
+   (syntax-rules () ((_ x ...)
+                     ;; (testeez x ...)
+@@ -2231,6 +2260,8 @@
+ 
+    ))
+ 
++(provide "htmlprag")
++
+ ;;; @unnumberedsec History
+ 
+ ;;; @table @asis

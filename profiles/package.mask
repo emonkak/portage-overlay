@@ -1,0 +1,7 @@
+=app-editors/gvim-9999
+=app-editors/vim-9999
+=app-editors/vim-core-9999
+=app-misc/tmux-9999
+=dev-haskell/ghc-mod-9999
+=dev-haskell/reactive-banana-9999
+=x11-misc/dzen-9999
