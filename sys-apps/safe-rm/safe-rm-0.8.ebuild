@@ -4,7 +4,7 @@
 
 EAPI=3
 
-DESCRIPTION="preventing the accidental deletion of important files"
+DESCRIPTION="Preventing the accidental deletion of important files"
 HOMEPAGE="https://launchpad.net/safe-rm"
 SRC_URI="http://launchpad.net/safe-rm/trunk/${PV}/+download/${P}.tar.gz"
 
