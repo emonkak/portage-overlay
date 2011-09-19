@@ -9,7 +9,7 @@ MY_P="${MY_P/_/-}"
 
 DESCRIPTION="gtk2 based 2ch browser written in C++"
 HOMEPAGE="http://jd4linux.sourceforge.jp/"
-SRC_URI="mirror://sourceforge.jp/jd4linux/50791/${MY_P}.tgz"
+SRC_URI="mirror://sourceforge.jp/jd4linux/52863/${MY_P}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
