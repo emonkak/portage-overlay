@@ -6,7 +6,7 @@ inherit eutils
 
 DESCRIPTION="Foxit PDF Reader"
 HOMEPAGE="http://www.foxitsoftware.com/pdf/desklinux/"
-SRC_URI="http://mirrors.foxitsoftware.com/pub/foxit/reader/desktop/linux/1.x/1.1/enu/FoxitReader-1.1.0.tar.bz2"
+SRC_URI="http://mirrors.foxitsoftware.com/pub/foxit/reader/desktop/linux/1.x/1.1/enu/FoxitReader-${PV}.tar.bz2"
 
 LICENSE="Foxit Reader"
 SLOT="0"
