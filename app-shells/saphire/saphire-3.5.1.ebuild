@@ -2,13 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit flag-o-matic
-
 EAPI=3
 
 DESCRIPTION="A shell script language."
 HOMEPAGE="http://ab25cq.web.fc2.com/"
-SRC_URI="mirror://sourceforge.jp/sash/53064/${P}.tgz"
+SRC_URI="mirror://sourceforge.jp/sash/53160/${P}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -45,6 +43,7 @@ src_compile() {
 	sed -e 's/^CC=/CC?=/' \
 	    -e 's/^CFLAGS=/CFLAGS+=/' \
 	    -e '/^\t\$(INSTALL) -m 644 saphire\.sao/d' \
+	    -e '/^\t\$(INSTALL) -m 644 user_compl\.sao/d' \
 	    -i Makefile || die "sed failed"
 	emake saphire saphiresh || die "emake failed"
 }
@@ -56,4 +55,5 @@ src_install() {
 pkg_postinst() {
 	elog "You need to compile."
 	elog "% saphire -rn -c 'compile /etc/saphire/saphire.sa'"
+	elog "% saphire -rn -c 'compile /etc/saphire/user_compl.sa"
 }
