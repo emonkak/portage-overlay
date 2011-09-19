@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/ptex/ptex-3.1.10_p20090610-r1.ebuild,v 1.6 2010/07/10 17:28:49 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/ptex/ptex-3.1.10_p20090610-r1.ebuild,v 1.7 2011/07/01 11:34:32 hwoarang Exp $
 
 # jmbreuer FOR DEV ONLY
 RESTRICT="mirror test"
@@ -74,11 +74,13 @@ src_unpack() {
 	tar xzf "${WORKDIR}"/${PTETEX}/archive/jis.tar.gz -C "${WORKDIR}" || die
 	tar xzf "${WORKDIR}"/${PTETEX}/archive/morisawa.tar.gz -C "${WORKDIR}" || die
 
+	# Bug #323559
+	cd "${WORKDIR}"
+	epatch "${FILESDIR}"/latex-date-warning.patch
+
 	# Gentoo box reserves variable ${P}!!
 	cd "${S}"
 	epatch "${FILESDIR}"/${PF}-gentoo.patch
-
-	epatch "${FILESDIR}"/${P}-refuse_time_bomb.patch
 
 	cat <<EOF > "${S}"/my_option
 SRC_DIR="${WORKDIR}"
@@ -203,6 +205,10 @@ EOF
 
 	epatch "${FILESDIR}"/${P}-getline.patch \
 		"${FILESDIR}"/${P}-libpng14.patch
+
+	if has_version ">=media-libs/libpng-1.5"; then
+		epatch "${FILESDIR}/tetex-${TETEX_PV}-libpng15.patch"
+	fi
 
 	cd "${TETEX_S}/texk/dviljk"
 	eautoreconf
