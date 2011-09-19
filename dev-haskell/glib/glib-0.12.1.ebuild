@@ -11,7 +11,7 @@ inherit eutils haskell-cabal
 
 DESCRIPTION="Binding to the GLIB library for Gtk2Hs."
 HOMEPAGE="http://projects.haskell.org/gtk2hs/"
-SRC_URI="http://code.haskell.org/~duncan/gtk2hs/${P}.tar.gz"
+SRC_URI="http://hackage.haskell.org/packages/archive/${PN}/${PV}/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
