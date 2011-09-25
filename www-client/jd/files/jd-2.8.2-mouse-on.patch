@@ -1,0 +1,33 @@
+--- a/src/article/articleviewbase.cpp	(リビジョン 3965)
++++ b/src/article/articleviewbase.cpp	(作業コピー)
+@@ -2180,6 +2180,30 @@
+             margin_popup_x = CONFIG::get_margin_imgpopup_x();
+             margin_popup_y = CONFIG::get_margin_imgpopup();
+         }
++
++        else {
++            if( ! DBIMG::is_cached( imgurl ) && ! SESSION::is_online() ){
++                args.arg1 = "オフラインです";
++                view_popup = CORE::ViewFactory( CORE::VIEW_ARTICLEPOPUPHTML, m_url_article, args );
++            }
++
++            else if( DBIMG::get_type_real( imgurl ) == DBIMG::T_LARGE ){
++                args.arg1 = "画像サイズが大きすぎます。\n\n表示するにはリンクの上でコンテキストメニューを開いて\n「サイズが大きい画像を表示」をクリックしてください。";
++                view_popup = CORE::ViewFactory( CORE::VIEW_ARTICLEPOPUPHTML, m_url_article, args );
++            }
++
++            else{
++
++                const bool open_imageview = false;
++                const bool open_browser = ( ! open_imageview );
++                const bool mosaic = ( CONFIG::get_use_mosaic() );
++
++                // 画像ビューに切り替える
++                const bool switch_image = ( open_imageview );
++
++                open_image( imgurl, res_number, open_imageview, open_browser, mosaic, switch_image );
++            }
++        }
+     }
+ 
+     // レスポップアップ

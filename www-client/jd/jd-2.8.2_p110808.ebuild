@@ -38,7 +38,8 @@ S="${WORKDIR}/${MY_P}"
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
-	epatch "${FILESDIR}"/jd-2.8.0-free-reload.patch
+	epatch "${FILESDIR}"/${PN}-2.8.0-free-reload.patch
+	epatch "${FILESDIR}"/${PN}-2.8.2-mouse-on.patch
 	eautoreconf
 }
 
