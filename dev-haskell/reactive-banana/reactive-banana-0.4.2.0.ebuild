@@ -7,10 +7,9 @@
 EAPI="3"
 
 CABAL_FEATURES="lib profile haddock hscolour"
-inherit haskell-cabal
+inherit eutils haskell-cabal
 
-DESCRIPTION="Small but solid library for
-functional reactive programming (FRP)."
+DESCRIPTION="Small but solid library for functional reactive programming (FRP)."
 HOMEPAGE="http://haskell.org/haskellwiki/Reactive-banana"
 SRC_URI="http://hackage.haskell.org/packages/archive/${PN}/${PV}/${P}.tar.gz"
 
@@ -19,16 +18,13 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND="dev-haskell/mtl
-		=dev-haskell/quickcheck-2.4*
+RDEPEND="=dev-haskell/quickcheck-2.4*
 		=dev-haskell/transformers-0.2*
+		=dev-haskell/vault-0.1*
 		>=dev-lang/ghc-7.0.1"
 DEPEND="${RDEPEND}
 		>=dev-haskell/cabal-1.6"
 
 src_prepare() {
-	sed -i \
-		-e 's/base >= 4\.2 && < 4\.4/base >= 4.2/' \
-		-e 's/monads-tf == 0\.1\.\*/mtl/' \
-		"${S}/${PN}.cabal" || die
+	epatch "${FILESDIR}/reactive-banana-9999-fix-import.patch"
 }
