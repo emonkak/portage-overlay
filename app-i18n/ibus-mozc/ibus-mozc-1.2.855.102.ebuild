@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-i18n/ibus-mozc/ibus-mozc-1.2.809.102.ebuild,v 1.1 2011/08/18 15:18:44 matsuu Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-i18n/ibus-mozc/ibus-mozc-1.2.855.102.ebuild,v 1.1 2011/10/04 00:05:49 matsuu Exp $
 
 EAPI="3"
 PYTHON_DEPEND="2"
@@ -26,7 +26,6 @@ RDEPEND="dev-libs/glib:2
 	emacs? ( virtual/emacs )
 	ibus? ( >=app-i18n/ibus-1.2 )
 	scim? ( app-i18n/scim )
-	uim? ( app-i18n/uim )
 	qt4? (
 		x11-libs/qt-gui:4
 		app-i18n/zinnia
@@ -50,7 +49,7 @@ pkg_setup() {
 
 src_prepare() {
 	sed -i -e "s:/usr/lib/mozc:${EPREFIX}/usr/$(get_libdir)/mozc:" base/util.cc || die
-	epatch "${FILESDIR}/${P}-gentoo.patch"
+	epatch "${FILESDIR}/${PN}-1.2.809.102-gentoo.patch"
 	if use uim ; then
 		cp -r "${WORKDIR}/protobuf-${PROTOBUF_PV}" protobuf/files || die
 		cp -r "${FILESDIR}/uim" unix/ || die
