@@ -64,12 +64,8 @@ src_prepare() {
 
 		use alt-font-width && epatch "${FILESDIR}"/${PN}-9.06-font-width.patch
 
-		epatch "${FILESDIR}"/${PN}-9.12-fix-jisx0201-table.patch
-		epatch "${FILESDIR}"/${PN}-9.12-line-space.patch
-		epatch "${FILESDIR}"/${PN}-9.12-underline.patch
+		epatch "${FILESDIR}"/${PN}-9.12-my.patch
 	fi
-
-	use perl && epatch "${FILESDIR}"/${PN}-9.12-perl-xsubpp.patch
 
 	# kill the rxvt-unicode terminfo file - #192083
 	sed -i -e "/rxvt-unicode.terminfo/d" doc/Makefile.in || die "sed failed"
