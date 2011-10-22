@@ -6,7 +6,7 @@ EAPI=3
 
 DESCRIPTION="A shell script language."
 HOMEPAGE="http://ab25cq.web.fc2.com/"
-SRC_URI="mirror://sourceforge.jp/sash/53350/${P}.tgz"
+SRC_URI="mirror://sourceforge.jp/sash/53572/${P}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
