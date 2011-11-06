@@ -7,7 +7,7 @@
 EAPI="3"
 
 CABAL_FEATURES="bin"
-inherit haskell-cabal git
+inherit haskell-cabal git-2
 
 DESCRIPTION="Happy Haskell programming on Emacs"
 HOMEPAGE="http://www.mew.org/~kazu/proj/ghc-mod/"
