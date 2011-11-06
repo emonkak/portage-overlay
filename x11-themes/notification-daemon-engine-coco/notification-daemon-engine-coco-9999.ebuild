@@ -3,9 +3,9 @@
 # $Header: $
 
 EAPI=3
-inherit git
+inherit git-2
 
-EGIT_REPO_URI="git://github.com/tatofoo/notification-daemon-engine-coco.git"
+EGIT_REPO_URI="git://github.com/egrajeda/notification-daemon-engine-coco.git"
 EGIT_BOOTSTRAP="autogen.sh"
 
 DESCRIPTION="NotifyOSD inspired theme engine for the notification daemon"
