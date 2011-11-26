@@ -7,9 +7,10 @@
 EAPI="3"
 
 CABAL_FEATURES="lib profile haddock hscolour"
-inherit eutils haskell-cabal
+inherit haskell-cabal
 
-DESCRIPTION="Small but solid library for functional reactive programming (FRP)."
+DESCRIPTION="Small but solid library for
+functional reactive programming (FRP)."
 HOMEPAGE="http://haskell.org/haskellwiki/Reactive-banana"
 SRC_URI="http://hackage.haskell.org/packages/archive/${PN}/${PV}/${P}.tar.gz"
 
