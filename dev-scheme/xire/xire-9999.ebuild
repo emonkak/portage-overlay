@@ -23,7 +23,6 @@ DEPEND=">=dev-scheme/gauche-0.9
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-	epatch "${FILESDIR}/${P}-fix-makefile.patch"
 	eautoconf
 }
 
