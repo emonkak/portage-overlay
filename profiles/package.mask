@@ -5,4 +5,3 @@
 =dev-haskell/ghc-mod-9999
 =dev-haskell/reactive-banana-9999
 =x11-misc/dzen-9999
->app-shells/saphire-3.5.1
