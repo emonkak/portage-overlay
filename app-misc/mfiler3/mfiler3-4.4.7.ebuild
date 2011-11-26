@@ -9,7 +9,7 @@ EAPI=3
 DESCRIPTION="This program is a traditional Japanese style 2pain file manager
 with a embedded shell scripting system \"saphire shell\"."
 HOMEPAGE="http://ab25cq.web.fc2.com/"
-SRC_URI="mirror://sourceforge.jp/${PN}/53063/${P}.tgz"
+SRC_URI="mirror://sourceforge.jp/${PN}/53899/${P}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
