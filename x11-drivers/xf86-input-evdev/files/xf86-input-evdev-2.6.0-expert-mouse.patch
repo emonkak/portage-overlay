@@ -1,0 +1,79 @@
+diff --git a/src/emuMB.c b/src/emuMB.c
+index 764b30e..287edc6 100644
+--- a/src/emuMB.c
++++ b/src/emuMB.c
+@@ -96,7 +96,7 @@ static signed char stateTab[11][5][3] = {
+     {  0,  0,  0 },   /* nothing -> ground (no change) */
+     {  0,  0,  1 },   /* left -> delayed left */
+     {  0,  0,  2 },   /* right -> delayed right */
+-    {  2,  0,  3 },   /* left & right (middle press) -> pressed middle */
++    {  9,  0,  3 },   /* left & right (middle press) -> pressed middle */
+     {  0,  0, -1 }    /* timeout N/A */
+   },
+ /* 1 delayed left */
+@@ -104,7 +104,7 @@ static signed char stateTab[11][5][3] = {
+     {  1, -1,  0 },   /* nothing (left event) -> ground */
+     {  0,  0,  1 },   /* left -> delayed left (no change) */
+     {  1, -1,  2 },   /* right (left event) -> delayed right */
+-    {  2,  0,  3 },   /* left & right (middle press) -> pressed middle */
++    {  9,  0,  3 },   /* left & right (middle press) -> pressed middle */
+     {  1,  0,  4 },   /* timeout (left press) -> pressed left */
+   },
+ /* 2 delayed right */
+@@ -112,12 +112,12 @@ static signed char stateTab[11][5][3] = {
+     {  3, -3,  0 },   /* nothing (right event) -> ground */
+     {  3, -3,  1 },   /* left (right event) -> delayed left (no change) */
+     {  0,  0,  2 },   /* right -> delayed right (no change) */
+-    {  2,  0,  3 },   /* left & right (middle press) -> pressed middle */
++    {  9,  0,  3 },   /* left & right (middle press) -> pressed middle */
+     {  3,  0,  5 },   /* timeout (right press) -> pressed right */
+   },
+ /* 3 pressed middle */
+   {
+-    { -2,  0,  0 },   /* nothing (middle release) -> ground */
++    { -9,  0,  0 },   /* nothing (middle release) -> ground */
+     {  0,  0,  7 },   /* left -> released right */
+     {  0,  0,  6 },   /* right -> released left */
+     {  0,  0,  3 },   /* left & right -> pressed middle (no change) */
+@@ -141,33 +141,33 @@ static signed char stateTab[11][5][3] = {
+   },
+ /* 6 released left */
+   {
+-    { -2,  0,  0 },   /* nothing (middle release) -> ground */
+-    { -2,  0,  1 },   /* left (middle release) -> delayed left */
++    { -9,  0,  0 },   /* nothing (middle release) -> ground */
++    { -9,  0,  1 },   /* left (middle release) -> delayed left */
+     {  0,  0,  6 },   /* right -> released left (no change) */
+     {  1,  0,  8 },   /* left & right (left press) -> repressed left */
+     {  0,  0, -1 },   /* timeout N/A */
+   },
+ /* 7 released right */
+   {
+-    { -2,  0,  0 },   /* nothing (middle release) -> ground */
++    { -9,  0,  0 },   /* nothing (middle release) -> ground */
+     {  0,  0,  7 },   /* left -> released right (no change) */
+-    { -2,  0,  2 },   /* right (middle release) -> delayed right */
++    { -9,  0,  2 },   /* right (middle release) -> delayed right */
+     {  3,  0,  9 },   /* left & right (right press) -> repressed right */
+     {  0,  0, -1 },   /* timeout N/A */
+   },
+ /* 8 repressed left */
+   {
+-    { -2, -1,  0 },   /* nothing (middle release, left release) -> ground */
+-    { -2,  0,  4 },   /* left (middle release) -> pressed left */
++    { -9, -1,  0 },   /* nothing (middle release, left release) -> ground */
++    { -9,  0,  4 },   /* left (middle release) -> pressed left */
+     { -1,  0,  6 },   /* right (left release) -> released left */
+     {  0,  0,  8 },   /* left & right -> repressed left (no change) */
+     {  0,  0, -1 },   /* timeout N/A */
+   },
+ /* 9 repressed right */
+   {
+-    { -2, -3,  0 },   /* nothing (middle release, right release) -> ground */
++    { -9, -3,  0 },   /* nothing (middle release, right release) -> ground */
+     { -3,  0,  7 },   /* left (right release) -> released right */
+-    { -2,  0,  5 },   /* right (middle release) -> pressed right */
++    { -9,  0,  5 },   /* right (middle release) -> pressed right */
+     {  0,  0,  9 },   /* left & right -> repressed right (no change) */
+     {  0,  0, -1 },   /* timeout N/A */
+   },
