@@ -11,7 +11,7 @@ EXPORT_FUNCTIONS src_configure src_install
 
 [ -z "$SRC_URI" ] && SRC_URI="http://registry.npmjs.org/${PN}/-/${P}.tgz"
 
-DEPEND="${DEPEND} dev-node/npm"
+DEPEND="${DEPEND} net-libs/nodejs"
 
 npm_src_configure() {
 	local prefix="${D%/}${EPREFIX}"
