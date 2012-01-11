@@ -1,10 +1,10 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tmux/tmux-1.5.ebuild,v 1.1 2011/07/13 09:20:03 radhermit Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tmux/tmux-1.5.ebuild,v 1.5 2011/11/06 19:09:19 armin76 Exp $
 
 EAPI=4
 
-inherit eutils
+inherit eutils autotools
 
 DESCRIPTION="Terminal multiplexer"
 HOMEPAGE="http://tmux.sourceforge.net"
@@ -12,7 +12,7 @@ SRC_URI="mirror://sourceforge/tmux/${P}.tar.gz"
 
 LICENSE="ISC"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
+KEYWORDS="amd64 ~ppc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
 IUSE="cjk vim-syntax"
 
 DEPEND="
@@ -48,6 +48,12 @@ src_prepare() {
 		epatch "${FILESDIR}"/tmux-1.2-cjkwidth.patch
 		epatch "${FILESDIR}"/tmux-1.4-vt100-border.patch
 	fi
+	epatch "${FILESDIR}"/${P}-darwin.patch  # drop on next release
+	eautoreconf  # for darwin patch
+	# look for config file in the prefix
+	sed -i -e '/SYSTEM_CFG/s:"/etc:"'"${EPREFIX}"'/etc:' tmux.h || die
+	# and don't just add some includes
+	sed -i -e 's:-I/usr/local/include::' Makefile.in || die
 }
 
 src_install() {
