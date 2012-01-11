@@ -9,19 +9,18 @@ EAPI=3
 DESCRIPTION="This program is a traditional Japanese style 2pain file manager
 with a embedded shell scripting system \"saphire shell\"."
 HOMEPAGE="http://ab25cq.web.fc2.com/"
-SRC_URI="mirror://sourceforge.jp/${PN}/54022/${P}.tgz"
+SRC_URI="mirror://sourceforge.jp/${PN}/54457/${P}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~x86 ~amd64 ~x64-macos ~x86-macos"
 IUSE="debug migemo socket"
 RESTRICT="mirror strip"
 
 DEPEND="!app-misc/mfiler2
 	app-shells/saphire
-	dev-libs/boehm-gc
 	dev-libs/oniguruma
-	sys-libs/glibc
+	!prefix? ( sys-libs/glibc )
 	sys-libs/ncurses
 	sys-libs/readline
 	migemo? ( app-text/cmigemo )"
@@ -36,9 +35,9 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf="--sysconfdir=/etc/mfiler3"
+	local myconf="--sysconfdir=${EPREFIX}/etc/mfiler3"
 	use debug && myconf+=" --with-debug"
-	use migemo && myconf+=" --with-migemo --with-system-migemodir=/usr/share/migemo"
+	use migemo && myconf+=" --with-migemo --with-system-migemodir=${EPREFIX}/usr/share/migemo"
 	use socket && myconf+=" --with-socket"
 	econf ${myconf} || die "econf failed"
 }
@@ -52,10 +51,10 @@ src_compile() {
 }
 
 src_install() {
-	einstall sysconfdir="${D}"/etc/mfiler3 || die "einstall failed"
+	einstall sysconfdir="${D%/}/${EPREFIX}/etc/mfiler3" || die "einstall failed"
 }
 
 pkg_postinst() {
 	elog "You need to compile."
-	elog "% saphire -c 'compile /etc/mfiler3/mfiler3.sa'"
+	elog "\$ saphire -c 'compile ${EPREFIX}/etc/mfiler3/mfiler3.sa'"
 }
