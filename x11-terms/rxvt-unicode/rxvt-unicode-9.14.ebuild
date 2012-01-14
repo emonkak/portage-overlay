@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.12-r1.ebuild,v 1.1 2011/07/04 22:26:12 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.14.ebuild,v 1.1 2011/12/22 14:56:58 jer Exp $
 
 EAPI="4"
 
@@ -15,23 +15,29 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris"
 IUSE="
 	256-color alt-font-width afterimage blink +focused-urgency fading-colors
-	+font-styles force-hints iso14755 +mousewheel perl pixbuf truetype unicode3
-	+vanilla wcwidth
+	+font-styles iso14755 +mousewheel +perl pixbuf
+	startup-notification truetype unicode3 +vanilla wcwidth
 "
 
-RDEPEND="x11-libs/libX11
-	x11-libs/libXft
-	x11-libs/libXrender
+RDEPEND="
 	>=sys-libs/ncurses-5.7-r6
 	afterimage? ( || ( media-libs/libafterimage x11-wm/afterstep ) )
+	kernel_Darwin? ( dev-perl/Mac-Pasteboard )
+	media-libs/fontconfig
 	perl? ( dev-lang/perl )
 	pixbuf? ( x11-libs/gdk-pixbuf x11-libs/gtk+:2 )
-	kernel_Darwin? ( dev-perl/Mac-Pasteboard )"
-DEPEND="${RDEPEND}
+	startup-notification? ( x11-libs/startup-notification )
+	x11-libs/libX11
+	x11-libs/libXft
+	x11-libs/libXrender
+"
+DEPEND="
+	${RDEPEND}
 	dev-util/pkgconfig
-	x11-proto/xproto"
+	x11-proto/xproto
+"
 
-REQUIRED_USE="vanilla? ( !alt-font-width focused-urgency !force-hints !wcwidth )"
+REQUIRED_USE="vanilla? ( !alt-font-width focused-urgency !wcwidth )"
 
 src_prepare() {
 	# fix for prefix not installing properly
@@ -42,10 +48,7 @@ src_prepare() {
 		einfo "   or the *afterimage* USE flag. Enabling both will default to pixbuf."
 	fi
 
-	if use vanilla; then
-		ewarn " + You have enabled the vanilla USE flag."
-		ewarn "   This means no USE flag controlled patches will be applied."
-	else
+	if ! use vanilla; then
 		ewarn " + You are going to include unsupported third-party bug fixes/features."
 
 		use wcwidth && epatch doc/wcwidth.patch
@@ -55,9 +58,6 @@ src_prepare() {
 
 		# bug #263638
 		epatch "${FILESDIR}"/${PN}-9.06-popups-hangs.patch
-
-		# bug #346553
-		use force-hints && epatch "${FILESDIR}"/${PN}-9.10-force-hints.patch
 
 		# bug #237271
 		epatch "${FILESDIR}"/${PN}-9.05_no-MOTIF-WM-INFO.patch
@@ -87,6 +87,7 @@ src_configure() {
 		$(use_enable mousewheel) \
 		$(use_enable perl) \
 		$(use_enable pixbuf) \
+		$(use_enable startup-notification) \
 		$(use_enable truetype xft) \
 		$(use_enable unicode3) \
 		${myconf}

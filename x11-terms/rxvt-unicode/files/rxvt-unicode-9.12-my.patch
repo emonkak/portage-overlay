@@ -1,5 +1,5 @@
 diff --git a/src/Makefile.in b/src/Makefile.in
-index be7f849..b5c0767 100644
+index ac4cfee..80afd6b 100644
 --- a/src/Makefile.in
 +++ b/src/Makefile.in
 @@ -115,7 +115,7 @@ perlxsi.c: Makefile
@@ -12,7 +12,7 @@ index be7f849..b5c0767 100644
  rxvtperl.o: rxvtperl.C perlxsi.c
  	$(COMPILE) $(PERLFLAGS) -DLIBDIR="\"$(libdir)/urxvt\"" -c $<
 diff --git a/src/rxvtfont.C b/src/rxvtfont.C
-index d0578d8..4316334 100644
+index 46a38c4..bfbb676 100644
 --- a/src/rxvtfont.C
 +++ b/src/rxvtfont.C
 @@ -28,6 +28,8 @@
@@ -160,10 +160,10 @@ index d0578d8..4316334 100644
              ep->x = x_ + cwidth;
  
 diff --git a/src/rxvtperl.xs b/src/rxvtperl.xs
-index f450350..c1bb0da 100644
+index f2d4b50..e410122 100644
 --- a/src/rxvtperl.xs
 +++ b/src/rxvtperl.xs
-@@ -1894,5 +1894,5 @@ overlay::hide ()
+@@ -1921,5 +1921,5 @@ overlay::hide ()
  void
  overlay::DESTROY ()
  
@@ -171,10 +171,10 @@ index f450350..c1bb0da 100644
 +INCLUDE_COMMAND: $PERL <iom_perl.xs -pe s/IOM_MODULE/urxvt/g,s/IOM_CLASS/urxvt/g
  
 diff --git a/src/screen.C b/src/screen.C
-index e75a38f..94e9f2b 100644
+index 5fa2334..6131f2e 100644
 --- a/src/screen.C
 +++ b/src/screen.C
-@@ -2420,8 +2420,8 @@ rxvt_term::scr_refresh () NOTHROW
+@@ -2437,8 +2437,8 @@ rxvt_term::scr_refresh () NOTHROW
                  XSetForeground (dpy, gc, pix_colors[fore]);
  
                XDrawLine (dpy, vt, gc,
@@ -185,7 +185,7 @@ index e75a38f..94e9f2b 100644
              }
          }                     /* for (col....) */
      }                         /* for (row....) */
-@@ -2466,7 +2466,7 @@ rxvt_term::scr_refresh () NOTHROW
+@@ -2483,7 +2483,7 @@ rxvt_term::scr_refresh () NOTHROW
                            Col2Pixel (col),
                            Row2Pixel (oldcursor.row),
                            (unsigned int) (Width2Pixel (cursorwidth) - 1),
