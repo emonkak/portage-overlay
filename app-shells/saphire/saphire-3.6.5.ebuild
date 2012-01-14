@@ -49,7 +49,7 @@ src_compile() {
 }
 
 src_install() {
-	einstall sysconfdir="${D%/}/${EPREFIX}/etc/saphire" || die "einstall failed"
+	einstall docdir="${ED}/usr/share/doc/saphire" sysconfdir="${ED}/etc/saphire" || die "einstall failed"
 }
 
 pkg_postinst() {
