@@ -4,13 +4,13 @@ index f8a1c6b..40d5726 100644
 +++ b/reactive-banana/src/Reactive/Banana.hs
 @@ -10,9 +10,12 @@ module Reactive.Banana (
      module Reactive.Banana.Implementation,
- 
+
      Event, Behavior, Discrete,
 +    Polymorph.initial,
 +    Polymorph.changes,
 +    Polymorph.value,
      ) where
- 
+
 -import Reactive.Banana.Incremental hiding (Discrete)
 +import Reactive.Banana.Incremental hiding (Discrete(..))
  import qualified Reactive.Banana.Incremental as Polymorph
