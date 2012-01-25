@@ -1,10 +1,10 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tmux/tmux-1.5.ebuild,v 1.5 2011/11/06 19:09:19 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tmux/tmux-1.6.ebuild,v 1.1 2012/01/25 09:03:16 wired Exp $
 
 EAPI=4
 
-inherit eutils autotools
+inherit eutils
 
 DESCRIPTION="Terminal multiplexer"
 HOMEPAGE="http://tmux.sourceforge.net"
@@ -12,7 +12,7 @@ SRC_URI="mirror://sourceforge/tmux/${P}.tar.gz"
 
 LICENSE="ISC"
 SLOT="0"
-KEYWORDS="amd64 ~ppc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
+KEYWORDS="~amd64 ~ppc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
 IUSE="cjk vim-syntax"
 
 DEPEND="
@@ -33,12 +33,19 @@ pkg_setup() {
 		ewarn "tmux startup."
 		ewarn
 		ewarn "For the full Changelog, together with details on what replaced the above"
-		ewarn "commands, visit http://tmux.cvs.sourceforge.net/viewvc/tmux/tmux/CHANGES."
+		ewarn "commands, visit http://tmux.svn.sourceforge.net/viewvc/tmux/trunk/CHANGES"
 		ewarn
 		ewarn "WARNING: after updating to ${P} you will _not_ be able to connect to any"
 		ewarn "running 1.2 tmux server instances. You'll have to use an existing client to"
 		ewarn "end your old sessions or kill the old server instances. Otherwise you'll have"
 		ewarn "to temporarily downgrade to tmux 1.2 to access them."
+		echo
+	elif has_version "<app-misc/tmux-1.6"; then
+		echo
+		ewarn "Some configuration options changed in this release."
+		ewarn "Please read the CHANGES file in /usr/share/doc/${PF}/"
+		ewarn "or visit http://tmux.svn.sourceforge.net/viewvc/tmux/trunk/CHANGES"
+		ewarn "for more details."
 		echo
 	fi
 }
@@ -48,8 +55,6 @@ src_prepare() {
 		epatch "${FILESDIR}"/tmux-1.2-cjkwidth.patch
 		epatch "${FILESDIR}"/tmux-1.4-vt100-border.patch
 	fi
-	epatch "${FILESDIR}"/${P}-darwin.patch  # drop on next release
-	eautoreconf  # for darwin patch
 	# look for config file in the prefix
 	sed -i -e '/SYSTEM_CFG/s:"/etc:"'"${EPREFIX}"'/etc:' tmux.h || die
 	# and don't just add some includes
