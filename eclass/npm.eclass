@@ -7,23 +7,26 @@
 # Purpose:
 #
 
-EXPORT_FUNCTIONS src_configure src_install
+EXPORT_FUNCTIONS src_configure src_install src_unpack
 
 [ -z "$SRC_URI" ] && SRC_URI="http://registry.npmjs.org/${PN}/-/${P}.tgz"
 
 DEPEND="${DEPEND} net-libs/nodejs"
 
+npm_src_unpack() {
+	return
+}
+
 npm_src_configure() {
-	local prefix="${D%/}${EPREFIX}"
-	npm config set datadir "${prefix}/usr/share"
-	npm config set indodir "${prefix}/usr/share/info"
-	npm config set localstatedir "${prefix}/var/lib"
-	npm config set prefix "${prefix}/usr"
-	npm config set mandir "${prefix}/usr/share/man"
-	npm config set sysconfdir "${prefix}/etc"
+	npm config set datadir "${ED}/usr/share"
+	npm config set indodir "${ED}/usr/share/info"
+	npm config set localstatedir "${ED}/var/lib"
+	npm config set prefix "${ED}/usr"
+	npm config set mandir "${ED}/usr/share/man"
+	npm config set sysconfdir "${ED}/etc"
 	npm config list
 }
 
 npm_src_install() {
-	npm install -g package || die
+	npm install -g "${DISTDIR}/${A}" || die
 }
