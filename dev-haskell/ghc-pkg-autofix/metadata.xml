@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<herd>haskell</herd>
+	<maintainer>
+		<email>haskell@gentoo.org</email>
+	</maintainer>
+	<longdescription>
+		The cabal-install sometimes reinstall existing library and break some package dependencies. This utility fixes such situations by replacing old package id in &quot;broken&quot; package with new id.
+		Please Use at your own risk.
+		NOTE for v.0.2: Now ghc-pkg-autofix supports cabal-dev!
+	</longdescription>
+</pkgmetadata>
