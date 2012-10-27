@@ -1,14 +1,14 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.15.ebuild,v 1.1 2012/01/21 18:16:05 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.15-r1.ebuild,v 1.1 2012/06/18 02:42:57 jer Exp $
 
 EAPI="4"
 
-inherit autotools
+inherit autotools eutils
 
 DESCRIPTION="rxvt clone with xft and unicode support"
 HOMEPAGE="http://software.schmorp.de/pkg/rxvt-unicode.html"
-SRC_URI="http://dist.schmorp.de/rxvt-unicode/${P}.tar.bz2"
+SRC_URI="http://dist.schmorp.de/rxvt-unicode/Attic/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-lin
 IUSE="
 	256-color alt-font-width afterimage blink buffer-on-clear +focused-urgency
 	fading-colors +font-styles iso14755 +mousewheel +perl pixbuf secondary-wheel
-	startup-notification truetype unicode3 +vanilla wcwidth
+	startup-notification xft unicode3 +vanilla wcwidth
 "
 
 RDEPEND="
@@ -28,12 +28,12 @@ RDEPEND="
 	pixbuf? ( x11-libs/gdk-pixbuf x11-libs/gtk+:2 )
 	startup-notification? ( x11-libs/startup-notification )
 	x11-libs/libX11
-	x11-libs/libXft
 	x11-libs/libXrender
+	xft? ( x11-libs/libXft )
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	x11-proto/xproto
 "
 
@@ -63,10 +63,10 @@ src_prepare() {
 		epatch "${FILESDIR}"/${PN}-9.05_no-MOTIF-WM-INFO.patch
 
 		# support for wheel scrolling on secondary screens
-		use secondary-wheel && epatch "${FILESDIR}"/${P}-secondary-wheel.patch
+		use secondary-wheel && epatch "${FILESDIR}"/${PN}-9.14-secondary-wheel.patch
 
 		# ctrl-l buffer fix
-		use buffer-on-clear && epatch "${FILESDIR}"/${P}-clear.patch
+		use buffer-on-clear && epatch "${FILESDIR}"/${PN}-9.14-clear.patch
 
 		use alt-font-width && epatch "${FILESDIR}"/${PN}-9.06-font-width.patch
 
@@ -94,7 +94,7 @@ src_configure() {
 		$(use_enable perl) \
 		$(use_enable pixbuf) \
 		$(use_enable startup-notification) \
-		$(use_enable truetype xft) \
+		$(use_enable xft) \
 		$(use_enable unicode3) \
 		${myconf}
 }
@@ -113,6 +113,9 @@ src_install() {
 	dodoc README.FAQ Changes
 	cd "${S}"/doc
 	dodoc README* changes.txt etc/* rxvt-tabbed
+
+	make_desktop_entry urxvt rxvt-unicode utilities-terminal \
+		"System;TerminalEmulator"
 }
 
 pkg_postinst() {
