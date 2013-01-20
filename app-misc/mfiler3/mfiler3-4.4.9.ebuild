@@ -2,9 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit eutils
-
 EAPI=3
+inherit eutils
 
 DESCRIPTION="This program is a traditional Japanese style 2pain file manager
 with a embedded shell scripting system \"saphire shell\"."

@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit git
 EAPI=3
+inherit git
 
 EGIT_REPO_URI="git://repo.or.cz/fast-export.git"
 
