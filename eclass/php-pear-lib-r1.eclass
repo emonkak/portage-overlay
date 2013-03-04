@@ -56,29 +56,23 @@ php-pear-lib-r1_src_install() {
 	addpredict /var/lib/net-snmp/mib_indexes
 	addpredict /session_mm_cli0.sem
 
-	PHP_BIN="${EPREFIX}/usr/bin/php"
+	PHP_BIN="/usr/bin/php"
 
 	cd "${S}"
 
 	if [[ -f "${WORKDIR}"/package2.xml ]] ; then
 		mv -f "${WORKDIR}/package2.xml" "${S}"
-		local WWW_DIR="${EPREFIX}/usr/share/webapps/${PN}/${PVR}/htdocs"
+		local WWW_DIR="/usr/share/webapps/${PN}/${PVR}/htdocs"
 		peardev -d php_bin="${PHP_BIN}" -d www_dir="${WWW_DIR}" \
 			install --force --loose --nodeps --offline --packagingroot="${D}" \
 			"${S}/package2.xml" || die "Unable to install PEAR package"
 	else
 		mv -f "${WORKDIR}/package.xml" "${S}"
-		local WWW_DIR="${EPREFIX}/usr/share/webapps/${PN}/${PVR}/htdocs"
+		local WWW_DIR="/usr/share/webapps/${PN}/${PVR}/htdocs"
 		peardev -d php_bin="${PHP_BIN}" -d www_dir="${WWW_DIR}" \
 			install --force --loose --nodeps --offline --packagingroot="${D}" \
 			"${S}/package.xml" || die "Unable to install PEAR package"
 	fi
-
-	if [[ -n "${EPREFIX}" ]] ; then
-		mkdir -p ${ED}
-		cp -Rf "${D}/usr" "${ED}/"
-		rm -Rf "${D}/usr"
-        fi
 
 	rm -Rf "${ED}/usr/share/php/.channels" \
 	"${ED}/usr/share/php/.depdblock" \
