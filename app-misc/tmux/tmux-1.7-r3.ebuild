@@ -1,10 +1,12 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tmux/tmux-1.7-r1.ebuild,v 1.1 2013/01/08 15:12:29 jlec Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tmux/tmux-1.7-r3.ebuild,v 1.1 2013/02/13 09:35:36 jlec Exp $
 
-EAPI=4
+EAPI=5
 
-inherit bash-completion-r1 eutils
+AUTOTOOLS_AUTORECONF=true
+
+inherit autotools-utils bash-completion-r1 flag-o-matic eutils
 
 DESCRIPTION="Terminal multiplexer"
 HOMEPAGE="http://tmux.sourceforge.net"
@@ -12,7 +14,7 @@ SRC_URI="mirror://sourceforge/tmux/${P}.tar.gz"
 
 LICENSE="ISC"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x64-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x64-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
 IUSE="cjk vim-syntax"
 
 COMMON_DEPEND="
@@ -26,6 +28,8 @@ RDEPEND="${COMMON_DEPEND}
 		app-editors/gvim ) )"
 
 DOCS=( CHANGES FAQ NOTES TODO )
+
+PATCHES=( "${FILESDIR}"/${P}-terminfo.patch )
 
 pkg_setup() {
 	if has_version "<app-misc/tmux-1.7"; then
@@ -46,14 +50,21 @@ src_prepare() {
 		epatch "${FILESDIR}"/tmux-1.2-cjkwidth.patch
 		epatch "${FILESDIR}"/tmux-1.7-vt100-border.patch
 	fi
+
 	# look for config file in the prefix
 	sed -i -e '/SYSTEM_CFG/s:"/etc:"'"${EPREFIX}"'/etc:' tmux.h || die
 	# and don't just add some includes
-	sed -i -e 's:-I/usr/local/include::' Makefile.in || die
+	sed -i -e 's:-I/usr/local/include::' Makefile.am || die
+
+	# bug 438558
+	# 1.7 segfaults when entering copy mode if compiled with -Os
+	replace-flags -Os -O2
+
+	autotools-utils_src_prepare
 }
 
 src_install() {
-	default
+	autotools-utils_src_install
 
 	newbashcomp examples/bash_completion_tmux.sh ${PN}
 
