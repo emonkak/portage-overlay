@@ -1,0 +1,179 @@
+diff --git a/src/rxvtfont.C b/src/rxvtfont.C
+index 3ff0b04..e61d329 100644
+--- a/src/rxvtfont.C
++++ b/src/rxvtfont.C
+@@ -795,15 +795,6 @@ rxvt_font_x11::load (const rxvt_fontprop &prop, bool force_prop)
+             diff += 300; // more heavily penalize what looks like scaled bitmap fonts
+         }
+ 
+-      if (!set_properties (p, fname)
+-          // also weed out too large fonts
+-          || (prop.height != rxvt_fontprop::unset
+-              && p.height > prop.height))
+-        {
+-          free (fname);
+-          continue;
+-        }
+-
+       if (prop.height != rxvt_fontprop::unset) diff += (prop.height - p.height) * 128;
+       if (prop.weight != rxvt_fontprop::unset) diff += abs (prop.weight - p.weight);
+       if (prop.slant  != rxvt_fontprop::unset) diff += abs (prop.slant  - p.slant);
+@@ -1050,10 +1041,16 @@ rxvt_font_x11::draw (rxvt_drawable &d, int x, int y,
+ 
+   int base = ascent; // sorry, incorrect: term->fbase;
+ 
++  if (term->lineSpace > 0)
++    base += (int) (term->lineSpace / 2 + 0.5);
++
+   XGCValues v;
+   v.foreground = term->pix_colors[fg];
+   v.font = f->fid;
+ 
++  int w = term->fwidth * len;
++  int h = term->fheight;
++
+   if (enc2b)
+     {
+       const XChar2b *xc = enc_xchar2b (text, len, cs, slow);
+@@ -1061,30 +1058,28 @@ rxvt_font_x11::draw (rxvt_drawable &d, int x, int y,
+       if (bg == Color_bg && !slow)
+         {
+           v.background = term->pix_colors[bg];
+-          XChangeGC (disp, gc, GCForeground | GCBackground | GCFont, &v);
+-          XDrawImageString16 (disp, d, gc, x, y + base, xc, len);
++          XChangeGC (disp, gc, GCBackground, &v);
++          XFillRectangle (disp, d, gc, x, y, w, h);
+         }
+-      else
+-        {
+-          clear_rect (d, x, y, term->fwidth * len, term->fheight, bg);
+ 
+-          XChangeGC (disp, gc, GCForeground | GCFont, &v);
++      clear_rect (d, x, y, w, h, bg);
+ 
+-          if (slow)
++      XChangeGC (disp, gc, GCForeground | GCFont, &v);
++
++      if (slow)
++        {
++          do
+             {
+-              do
+-                {
+-                  if (xc->byte1 || xc->byte2)
+-                    XDrawString16 (disp, d, gc, x, y + base, xc, 1);
++              if (xc->byte1 || xc->byte2)
++                XDrawString16 (disp, d, gc, x, y + base, xc, 1);
+ 
+-                  x += term->fwidth;
+-                  xc++; len--;
+-                }
+-              while (len);
++              x += term->fwidth;
++              xc++; len--;
+             }
+-          else
+-            XDrawString16 (disp, d, gc, x, y + base, xc, len);
++          while (len);
+         }
++      else
++        XDrawString16 (disp, d, gc, x, y + base, xc, len);
+     }
+   else
+     {
+@@ -1093,30 +1088,28 @@ rxvt_font_x11::draw (rxvt_drawable &d, int x, int y,
+       if (bg == Color_bg && !slow)
+         {
+           v.background = term->pix_colors[bg];
+-          XChangeGC (disp, gc, GCForeground | GCBackground | GCFont, &v);
+-          XDrawImageString (disp, d, gc, x, y + base, xc, len);
++          XChangeGC (disp, gc, GCBackground, &v);
++          XFillRectangle (disp, d, gc, x, y, w, h);
+         }
+-      else
+-        {
+-          clear_rect (d, x, y, term->fwidth * len, term->fheight, bg);
+ 
+-          XChangeGC (disp, gc, GCForeground | GCFont, &v);
++      clear_rect (d, x, y, w, h, bg);
++
++      XChangeGC (disp, gc, GCForeground | GCFont, &v);
+ 
+-          if (slow)
++      if (slow)
++        {
++          do
+             {
+-              do
+-                {
+-                  if (*xc)
+-                    XDrawString (disp, d, gc, x, y + base, xc, 1);
++              if (*xc)
++                XDrawString (disp, d, gc, x, y + base, xc, 1);
+ 
+-                  x += term->fwidth;
+-                  xc++; len--;
+-                }
+-              while (len);
++              x += term->fwidth;
++              xc++; len--;
+             }
+-          else
+-            XDrawString (disp, d, gc, x, y + base, xc, len);
++          while (len);
+         }
++      else
++        XDrawString (disp, d, gc, x, y + base, xc, len);
+     }
+ }
+ 
+@@ -1395,6 +1388,9 @@ rxvt_font_xft::draw (rxvt_drawable &d, int x, int y,
+           ep->x = x_ + (cwidth - extents.xOff >> 1);
+           ep->y = y_ + ascent;
+ 
++          if (term->lineSpace > 0)
++            ep->y += (int) (term->lineSpace / 2 + 0.5);
++
+           if (extents.xOff == 0)
+             ep->x = x_ + cwidth;
+ 
+diff --git a/src/screen.C b/src/screen.C
+index 2589a08..d485b44 100644
+--- a/src/screen.C
++++ b/src/screen.C
+@@ -2451,8 +2451,8 @@ rxvt_term::scr_refresh () NOTHROW
+                 XSetForeground (dpy, gc, pix_colors[fore]);
+ 
+               XDrawLine (dpy, vt, gc,
+-                         xpixel, ypixel + font->ascent + 1,
+-                         xpixel + Width2Pixel (count) - 1, ypixel + font->ascent + 1);
++                         xpixel, ypixel + Height2Pixel (1) - 1,
++                         xpixel + Width2Pixel (count) - 1, ypixel + Height2Pixel (1) - 1);
+             }
+         }                     /* for (col....) */
+     }                         /* for (row....) */
+diff --git a/src/table/jis0201_1976_0.h b/src/table/jis0201_1976_0.h
+index 2a1eb67..45dd355 100644
+--- a/src/table/jis0201_1976_0.h
++++ b/src/table/jis0201_1976_0.h
+@@ -8,7 +8,7 @@ static uint32_t cs_jis0201_1976_0_from_unicode (unicode_t unicode) {
+     if (unicode <= 0x007d) return unicode;
+     if (0x007f <= unicode && unicode <= 0x009f) return unicode;
+     if (unicode == 0x203e) return 0x007e;
+-    if (unicode <= 0xff61 && 0xff9f <= unicode) return unicode - 0xfec0;
++    if (unicode >= 0xff61 && 0xff9f >= unicode) return unicode - 0xfec0;
+     return NOCHAR;
+ }
+ 
+diff --git a/src/table/jis0208_1990_0.h b/src/table/jis0208_1990_0.h
+index b23378f..0febcd3 100644
+--- a/src/table/jis0208_1990_0.h
++++ b/src/table/jis0208_1990_0.h
+@@ -2241,6 +2241,7 @@ const uint16_t *jis0208_1990_0_f_i[] = {
+ 
+ static uint32_t cs_jis0208_1990_0_from_unicode (unicode_t unicode) {
+     if (unicode == 0x2312) return 0x225e;
++    if (unicode == 0xff5e) return 0x2141;
+     uint8_t  l = unicode;
+     uint16_t h = unicode >> 8;
+     if (0x00 <= h && h <= 0xff
