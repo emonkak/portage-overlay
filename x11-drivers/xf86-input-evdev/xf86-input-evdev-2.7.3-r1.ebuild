@@ -1,8 +1,8 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-drivers/xf86-input-evdev/xf86-input-evdev-2.7.1.ebuild,v 1.1 2012/07/25 14:32:38 chithanh Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-drivers/xf86-input-evdev/xf86-input-evdev-2.7.3-r1.ebuild,v 1.1 2013/03/08 00:05:43 chithanh Exp $
 
-EAPI=4
+EAPI=5
 inherit xorg-2
 
 DESCRIPTION="Generic Linux input driver"
