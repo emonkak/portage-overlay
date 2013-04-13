@@ -1,12 +1,12 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tmux/tmux-1.7-r3.ebuild,v 1.1 2013/02/13 09:35:36 jlec Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tmux/tmux-1.8.ebuild,v 1.2 2013/03/27 15:33:02 wired Exp $
 
 EAPI=5
 
 AUTOTOOLS_AUTORECONF=true
 
-inherit autotools-utils bash-completion-r1 flag-o-matic eutils
+inherit autotools-utils bash-completion-r1 flag-o-matic
 
 DESCRIPTION="Terminal multiplexer"
 HOMEPAGE="http://tmux.sourceforge.net"
@@ -15,7 +15,7 @@ SRC_URI="mirror://sourceforge/tmux/${P}.tar.gz"
 LICENSE="ISC"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x64-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
-IUSE="cjk vim-syntax"
+IUSE="vim-syntax"
 
 COMMON_DEPEND="
 	>=dev-libs/libevent-2.0.10
@@ -27,9 +27,9 @@ RDEPEND="${COMMON_DEPEND}
 		app-editors/vim
 		app-editors/gvim ) )"
 
-DOCS=( CHANGES FAQ NOTES TODO )
+DOCS=( CHANGES FAQ README TODO )
 
-PATCHES=( "${FILESDIR}"/${P}-terminfo.patch )
+PATCHES=( "${FILESDIR}"/${PN}-1.7-terminfo.patch )
 
 pkg_setup() {
 	if has_version "<app-misc/tmux-1.7"; then
@@ -59,6 +59,9 @@ src_prepare() {
 	# bug 438558
 	# 1.7 segfaults when entering copy mode if compiled with -Os
 	replace-flags -Os -O2
+
+	# regenerate aclocal.m4 to support earlier automake versions
+	rm aclocal.m4
 
 	autotools-utils_src_prepare
 }
