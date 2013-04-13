@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.17.ebuild,v 1.1 2013/03/03 15:56:56 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.18.ebuild,v 1.1 2013/04/08 10:28:00 jer Exp $
 
 EAPI=4
 inherit autotools eutils
