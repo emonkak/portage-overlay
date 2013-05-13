@@ -15,5 +15,5 @@ DEPEND="${RDEPEND}
 	>=x11-proto/inputproto-2.1.99.3
 	>=sys-kernel/linux-headers-2.6"
 PATCHES=(
-	"${FILESDIR}/${PN}-2.6.0-expert-mouse.patch"
+	"${FILESDIR}/${PN}-2.8.0-emulate3buttons.patch"
 )
