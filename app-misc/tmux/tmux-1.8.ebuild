@@ -15,7 +15,7 @@ SRC_URI="mirror://sourceforge/tmux/${P}.tar.gz"
 LICENSE="ISC"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x64-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
-IUSE="vim-syntax"
+IUSE="vim-syntax cjk"
 
 COMMON_DEPEND="
 	>=dev-libs/libevent-2.0.10
