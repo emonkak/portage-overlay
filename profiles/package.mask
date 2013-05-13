@@ -4,4 +4,5 @@
 =app-misc/tmux-9999
 =dev-haskell/ghc-mod-9999
 =dev-haskell/reactive-banana-9999
+=media-libs/freetype-2.9999
 =x11-misc/dzen-9999
