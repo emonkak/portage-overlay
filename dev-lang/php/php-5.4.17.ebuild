@@ -1,18 +1,18 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/php/php-5.5.0_beta3.ebuild,v 1.1 2013/04/11 10:09:44 olemarkus Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/php/php-5.4.17.ebuild,v 1.4 2013/07/07 15:21:12 ago Exp $
 
 EAPI=5
 
 inherit eutils autotools flag-o-matic versionator depend.apache apache-module db-use libtool
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
+KEYWORDS="~alpha amd64 ~arm ~hppa ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
 
 function php_get_uri ()
 {
 	case "${1}" in
 		"php-pre")
-			echo "http://downloads.php.net/dsp/${2}"
+			echo "http://downloads.php.net/stas/${2}"
 		;;
 		"php")
 			echo "http://www.php.net/distributions/${2}"
@@ -43,11 +43,20 @@ PHP_RELEASE="php"
 [[ ${PV} == ${PV/_rc/} ]] || PHP_RELEASE="php-pre"
 PHP_P="${PN}-${PHP_PV}"
 
+PHP_PATCHSET_LOC="olemarkus"
+
 PHP_SRC_URI="$(php_get_uri "${PHP_RELEASE}" "${PHP_P}.tar.bz2")"
 
+PHP_PATCHSET="2"
+PHP_PATCHSET_URI="
+	$(php_get_uri "${PHP_PATCHSET_LOC}" "php-patchset-${SLOT}-r${PHP_PATCHSET}.tar.bz2")"
+
+PHP_FPM_INIT_VER="4"
 PHP_FPM_CONF_VER="1"
 
-SRC_URI="${PHP_SRC_URI}"
+SRC_URI="
+	${PHP_SRC_URI}
+	${PHP_PATCHSET_URI}"
 
 DESCRIPTION="The PHP language runtime engine: CLI, CGI, FPM/FastCGI, Apache2 and embed SAPIs."
 HOMEPAGE="http://php.net/"
@@ -68,12 +77,12 @@ IUSE="${IUSE} bcmath berkdb bzip2 calendar cdb cjk
 	enchant exif frontbase +fileinfo +filter firebird
 	flatfile ftp gd gdbm gmp +hash +iconv imap inifile
 	intl iodbc ipv6 +json kerberos ldap ldap-sasl libedit mhash
-	mssql mysql libmysqlclient mysqli nls
-	oci8-instant-client odbc +opcache pcntl pdo +phar +posix postgres qdbm
+	mssql mysql mysqlnd mysqli nls
+	oci8-instant-client odbc pcntl pdo +phar +posix postgres qdbm
 	readline recode selinux +session sharedmem
 	+simplexml snmp soap sockets spell sqlite ssl
 	sybase-ct sysvipc tidy +tokenizer truetype unicode wddx
-	+xml xmlreader xmlwriter xmlrpc xpm xsl zip zlib"
+	+xml xmlreader xmlwriter xmlrpc xpm xslt zip zlib"
 
 DEPEND="
 	>=app-admin/eselect-php-0.7.0[apache2?,fpm?]
@@ -108,7 +117,7 @@ DEPEND="
 	ldap-sasl? ( dev-libs/cyrus-sasl >=net-nds/openldap-1.2.11 )
 	libedit? ( || ( sys-freebsd/freebsd-lib dev-libs/libedit ) )
 	mssql? ( dev-db/freetds[mssql] )
-	libmysqlclient? (
+	!mysqlnd? (
 		mysql? ( virtual/mysql )
 		mysqli? ( >=virtual/mysql-4.1 )
 	)
@@ -145,7 +154,7 @@ DEPEND="
 		virtual/jpeg
 		media-libs/libpng:0= sys-libs/zlib
 	)
-	xsl? ( dev-libs/libxslt >=dev-libs/libxml2-2.6.8 )
+	xslt? ( dev-libs/libxslt >=dev-libs/libxml2-2.6.8 )
 	zip? ( sys-libs/zlib )
 	zlib? ( sys-libs/zlib )
 	virtual/mta
@@ -165,11 +174,11 @@ REQUIRED_USE="
 	wddx? ( xml )
 	xmlrpc? ( || ( xml iconv ) )
 	xmlreader? ( xml )
-	xsl? ( xml )
+	xslt? ( xml )
 	ldap-sasl? ( ldap )
 	mhash? ( hash )
 	phar? ( hash )
-	libmysqlclient? ( || (
+	mysqlnd? ( || (
 		mysql
 		mysqli
 		pdo
@@ -228,7 +237,11 @@ php_install_ini() {
 	# Set the include path to point to where we want to find PEAR packages
 	sed -e 's|^;include_path = ".:/php/includes".*|include_path = ".:'"${EPREFIX}"'/usr/share/php'${PHP_MV}':'"${EPREFIX}"'/usr/share/php"|' -i "${phpinisrc}"
 
-	
+	if use_if_iuse opcache; then
+		elog "Adding opcache to ${phpinisrc}"
+		echo "zend_extension=${PHP_DESTDIR}/$(get_libdir)/opcache.so" >> ${phpinisrc}
+	fi
+
 	dodir "${PHP_INI_DIR#${EPREFIX}}"
 	insinto "${PHP_INI_DIR#${EPREFIX}}"
 	newins "${phpinisrc}" "${PHP_INI_FILE}"
@@ -238,12 +251,6 @@ php_install_ini() {
 
 	dodir "${PHP_EXT_INI_DIR#${EPREFIX}}"
 	dodir "${PHP_EXT_INI_DIR_ACTIVE#${EPREFIX}}"
-
-	if use_if_iuse opcache; then
-		elog "Adding opcache to $PHP_EXT_INI_DIR"
-		echo "zend_extension=${PHP_DESTDIR}/$(get_libdir)/opcache.so" >> "${D}/${PHP_EXT_INI_DIR}"/opcache.ini
-		dosym "${PHP_EXT_INI_DIR#${EPREFIX}}/opcache.ini" "${PHP_EXT_INI_DIR_ACTIVE#${EPREFIX}}/opcache.ini"
-	fi
 
 	# SAPI-specific handling
 
@@ -284,10 +291,10 @@ src_prepare() {
 	sed -re	"s|^(PHP_EXTRA_VERSION=\").*(\")|\1-pl${PR/r/}-gentoo\2|g" \
 		-i configure.in || die "Unable to change PHP branding"
 
-
-	epatch "${FILESDIR}"/iodbc-pkgconfig.patch
-	epatch "${FILESDIR}"/stricter-libc-client-symlink-check.patch
-	epatch "${FILESDIR}"/all_strict_aliasing.patch
+	# Apply generic PHP patches
+	EPATCH_SOURCE="${WORKDIR}/patches/generic" EPATCH_SUFFIX="patch" \
+		EPATCH_FORCE="yes" \
+		EPATCH_MULTI_MSG="Applying generic patches and fixes from upstream..." epatch
 
 	# Patch PHP to show Gentoo as the server platform
 	sed -e 's/PHP_UNAME=`uname -a | xargs`/PHP_UNAME=`uname -s -n -r -v | xargs`/g' \
@@ -377,7 +384,6 @@ src_configure() {
 	$(use_enable pcntl pcntl )
 	$(use_enable phar phar )
 	$(use_enable pdo pdo )
-	$(use_enable opcache opcache )
 	$(use_with postgres pgsql "${EPREFIX}"/usr)
 	$(use_enable posix posix )
 	$(use_with spell pspell "${EPREFIX}"/usr)
@@ -399,7 +405,7 @@ src_configure() {
 	$(use_enable xmlreader xmlreader )
 	$(use_enable xmlwriter xmlwriter )
 	$(use_with xmlrpc xmlrpc)
-	$(use_with xsl xsl "${EPREFIX}"/usr)
+	$(use_with xslt xsl "${EPREFIX}"/usr)
 	$(use_enable zip zip )
 	$(use_with zlib zlib "${EPREFIX}"/usr)
 	$(use_enable debug debug )"
@@ -453,19 +459,25 @@ src_configure() {
 	fi
 
 	# MySQL support
-	local mysqllib="mysqlnd"
-	local mysqlilib="mysqlnd"
-	use libmysqlclient && mysqllib="${EPREFIX}/usr"
-	use libmysqlclient && mysqlilib="${EPREFIX}/usr/bin/mysql_config"
-	
-	my_conf+=" $(use_with mysql mysql $mysqllib)"
-	my_conf+=" $(use_with mysqli mysqli $mysqlilib)"
-
-	local mysqlsock=" $(use_with mysql mysql-sock ${EPREFIX}/var/run/mysqld/mysqld.sock)"
 	if use mysql ; then
-		my_conf+="${mysqlsock}"
-	elif use mysqli ; then
-		my_conf+="${mysqlsock}"
+		if use mysqlnd ; then
+			my_conf+="
+			$(use_with mysql mysql mysqlnd)"
+		else
+			my_conf+="
+			$(use_with mysql mysql ${EPREFIX}/usr)"
+		fi
+		my_conf+="
+		$(use_with mysql mysql-sock ${EPREFIX}/var/run/mysqld/mysqld.sock)"
+	fi
+
+	# MySQLi support
+	if use mysqlnd ; then
+		my_conf+="
+		$(use_with mysqli mysqli mysqlnd)"
+	else
+		my_conf+="
+		$(use_with mysqli mysqli ${EPREFIX}/usr/bin/mysql_config)"
 	fi
 
 	# ODBC support
@@ -488,8 +500,15 @@ src_configure() {
 	# PDO support
 	if use pdo ; then
 		my_conf+="
-		$(use_with mssql pdo-dblib )
-		$(use_with mysql pdo-mysql ${mysqllib})
+		$(use_with mssql pdo-dblib )"
+		if use mysqlnd ; then
+			my_conf+="
+			$(use_with mysqlnd pdo-mysql mysqlnd)"
+		else
+			my_conf+="
+			$(use_with mysql pdo-mysql ${EPREFIX}/usr)"
+		fi
+		my_conf+="
 		$(use_with postgres pdo-pgsql )
 		$(use_with sqlite pdo-sqlite ${EPREFIX}/usr)
 		$(use_with odbc pdo-odbc unixODBC,${EPREFIX}/usr)"
@@ -623,7 +642,8 @@ src_install() {
 				keepdir "/usr/$(get_libdir)/apache2/modules"
 			else
 				# needed each time, php_install_ini would reset it
-				into "${PHP_DESTDIR#${EPREFIX}}"
+				local dest="${PHP_DESTDIR#${EPREFIX}}"
+				into "${dest}"
 				case "$sapi" in
 					cli)
 						source="sapi/cli/php"
@@ -646,6 +666,8 @@ src_install() {
 					dolib.so "${source}" || die "Unable to install ${sapi} sapi"
 				else
 					dobin "${source}" || die "Unable to install ${sapi} sapi"
+					local name="$(basename ${source})"
+					dosym "${dest}/bin/${name}" "/usr/bin/${name}${SLOT}"
 				fi
 			fi
 
