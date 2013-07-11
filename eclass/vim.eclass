@@ -420,7 +420,7 @@ vim_src_configure() {
 			--enable-multibyte"
 		myconf="${myconf} `use_enable cscope`"
 		myconf="${myconf} `use_enable gpm`"
-		myconf="${myconf} `use_enable lua luainterp`"
+		myconf="${myconf} `use_enable lua luainterp` --with-lua-prefix=${EPREFIX}/usr"
 		myconf="${myconf} `use_enable perl perlinterp`"
 		myconf="${myconf} `use_enable python pythoninterp`"
 		myconf="${myconf} `use_enable ruby rubyinterp`"
