@@ -67,7 +67,7 @@ src_prepare() {
 	fi
 
 	sed -e "/hinting_engine/ s/FT_CFF_HINTING_FREETYPE/FT_CFF_HINTING_ADOBE/" \
-		-e "/no_stem_darkening/ s/FALSE/FALSE/" \
+		-e "/no_stem_darkening/ s/FALSE/TRUE/" \
 		-i src/cff/cffobjs.c || die
 
 	epatch "${FILESDIR}"/${PN}-2.3.2-enable-valid.patch
