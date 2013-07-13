@@ -23,6 +23,9 @@ RDEPEND="${DEPEND}"
 
 src_configure() {
 	econf $(use_with libedit)
+	if [[ ${CHOST} == *-darwin* ]]; then
+		sed -e 's| -Wno-long-double||' -i Makefile || die 'sed failed'
+	fi
 }
 
 src_install() {
