@@ -11,9 +11,9 @@ SRC_URI="http://packages.groonga.org/source/groonga/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="lzo munin +mecab msgpack +zlib"
+IUSE="libedit lzo mecab msgpack munin +zlib"
 
-DEPEND="dev-libs/libedit
+DEPEND="libedit? ( dev-libs/libedit )
 lzo? ( dev-libs/lzo )
 mecab? ( app-text/mecab )
 munin? ( net-analyzer/munin )
