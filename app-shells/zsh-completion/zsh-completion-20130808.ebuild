@@ -1,33 +1,22 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-shells/zsh-completion/zsh-completion-20091203-r1.ebuild,v 1.5 2012/06/04 22:17:40 alexxy Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-shells/zsh-completion/zsh-completion-20130808.ebuild,v 1.1 2013/08/08 23:05:06 radhermit Exp $
 
 EAPI=5
 
-MY_PV="20080310"
 DESCRIPTION="Programmable Completion for zsh (includes emerge and ebuild commands)"
-HOMEPAGE="http://gentoo.org"
-SRC_URI="mirror://gentoo/${PN}-${MY_PV}.tar.bz2"
+HOMEPAGE="http://git.overlays.gentoo.org/gitweb/?p=proj/zsh-completion.git"
+SRC_URI="http://dev.gentoo.org/~radhermit/dist/${P}.tar.bz2"
 
 LICENSE="ZSH"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 ~s390 ~sh sparc x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc64-solaris"
-IUSE=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc64-solaris"
 
-DEPEND=">=app-shells/zsh-4.3.5"
-RDEPEND="${DEPEND}"
-
-S="${WORKDIR}"/${PN}-${MY_PV}
+RDEPEND=">=app-shells/zsh-4.3.5"
 
 src_prepare() {
 	sed -e 's/\/\(etc\|var\)/$EPREFIX\0/' \
 	    -i _gentoo_packages || die "sed failed"
-}
-
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-	rm _eix
 }
 
 src_install() {
