@@ -1,12 +1,12 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/php/php-5.4.17.ebuild,v 1.4 2013/07/07 15:21:12 ago Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/php/php-5.4.19.ebuild,v 1.1 2013/08/23 11:22:10 olemarkus Exp $
 
 EAPI=5
 
 inherit eutils autotools flag-o-matic versionator depend.apache apache-module db-use libtool
 
-KEYWORDS="~alpha amd64 ~arm ~hppa ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
 
 function php_get_uri ()
 {
@@ -255,7 +255,7 @@ php_install_ini() {
 	# SAPI-specific handling
 
 	if [[ "${sapi}" == "fpm" ]] ; then
-        [[ -z ${PHP_FPM_CONF_VER} ]] && PHP_FPM_CONF_VER=0
+		[[ -z ${PHP_FPM_CONF_VER} ]] && PHP_FPM_CONF_VER=0
 		einfo "Installing FPM CGI config file php-fpm.conf"
 		insinto "${PHP_INI_DIR#${EPREFIX}}"
 		newins "${FILESDIR}/php-fpm-r${PHP_FPM_CONF_VER}.conf" php-fpm.conf
@@ -541,9 +541,9 @@ src_configure() {
 	my_conf="${my_conf} --with-pcre-regex=${EPREFIX}/usr --with-pcre-dir=${EPREFIX}/usr"
 
 	# Catch CFLAGS problems
-    # Fixes bug #14067.
-    # Changed order to run it in reverse for bug #32022 and #12021.
-    replace-cpu-flags "k6*" "i586"
+	# Fixes bug #14067.
+	# Changed order to run it in reverse for bug #32022 and #12021.
+	replace-cpu-flags "k6*" "i586"
 
 	# Support user-passed configuration parameters
 	my_conf="${my_conf} ${EXTRA_ECONF:-}"
@@ -685,7 +685,11 @@ src_install() {
 
 	# Installing opcache module
 	if use_if_iuse opcache ; then
-		dolib.so "modules/opcache$(get_libname)" || die "Unable to install opcache module"
+		if [[ ${CHOST} == *-darwin* ]]; then
+			dolib.so "modules/opcache.bundle" || die "Unable to install opcache module"
+		else
+			dolib.so "modules/opcache$(get_libname)" || die "Unable to install opcache module"
+		fi
 	fi
 
 	# Install env.d files
