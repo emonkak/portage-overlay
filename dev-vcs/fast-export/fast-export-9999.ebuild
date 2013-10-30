@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=3
-inherit git
+inherit git-r3
 
 EGIT_REPO_URI="git://repo.or.cz/fast-export.git"
 

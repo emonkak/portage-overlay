@@ -3,10 +3,9 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-misc/growl-for-linux/growl-for-linux-0.2.ebuild,v 1.1 2011/05/01 03:47:51 matsuu Exp $
 
 EAPI=3
-inherit git multilib
+inherit git-r3 multilib
 
 EGIT_REPO_URI="git://github.com/mattn/growl-for-linux.git"
-EGIT_BOOTSTRAP="autogen.sh"
 
 DESCRIPTION="Growl Implementation For Linux"
 HOMEPAGE="http://mattn.github.com/growl-for-linux/"
@@ -26,6 +25,10 @@ RDEPEND="dev-db/sqlite:3
 	x11-libs/gtk+:2"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
+
+src_prepare() {
+	./autogen.sh
+}
 
 src_configure() {
 	econf --disable-static
