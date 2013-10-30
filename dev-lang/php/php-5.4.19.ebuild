@@ -687,6 +687,7 @@ src_install() {
 	if use_if_iuse opcache ; then
 		if [[ ${CHOST} == *-darwin* ]]; then
 			dolib.so "modules/opcache.bundle" || die "Unable to install opcache module"
+			dosym "modules/opcache.bundle" "modules/opcache.so"
 		else
 			dolib.so "modules/opcache$(get_libname)" || die "Unable to install opcache module"
 		fi

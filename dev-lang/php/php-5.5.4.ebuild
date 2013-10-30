@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/php/php-5.5.3.ebuild,v 1.1 2013/08/23 11:22:10 olemarkus Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/php/php-5.5.4.ebuild,v 1.1 2013/09/22 19:52:24 olemarkus Exp $
 
 EAPI=5
 
@@ -83,7 +83,7 @@ DEPEND="
 	bzip2? ( app-arch/bzip2 )
 	cdb? ( || ( dev-db/cdb dev-db/tinycdb ) )
 	cjk? ( !gd? (
-		virtual/jpeg
+		virtual/jpeg:0
 		media-libs/libpng:0=
 		sys-libs/zlib
 	) )
@@ -91,12 +91,12 @@ DEPEND="
 	curl? ( >=net-misc/curl-7.10.5 )
 	enchant? ( app-text/enchant )
 	exif? ( !gd? (
-		virtual/jpeg
+		virtual/jpeg:0
 		media-libs/libpng:0=
 		sys-libs/zlib
 	) )
 	firebird? ( dev-db/firebird )
-	gd? ( virtual/jpeg media-libs/libpng:0= sys-libs/zlib )
+	gd? ( virtual/jpeg:0 media-libs/libpng:0= sys-libs/zlib )
 	gdbm? ( >=sys-libs/gdbm-1.8.0 )
 	gmp? ( >=dev-libs/gmp-4.1.2 )
 	iconv? ( virtual/libiconv )
@@ -132,7 +132,7 @@ DEPEND="
 		=media-libs/freetype-2*
 		>=media-libs/t1lib-5.0.0
 		!gd? (
-			virtual/jpeg media-libs/libpng:0= sys-libs/zlib )
+			virtual/jpeg:0 media-libs/libpng:0= sys-libs/zlib )
 	)
 	unicode? ( dev-libs/oniguruma )
 	wddx? ( >=dev-libs/libxml2-2.6.8 )
@@ -142,7 +142,7 @@ DEPEND="
 	xmlwriter? ( >=dev-libs/libxml2-2.6.8 )
 	xpm? (
 		x11-libs/libXpm
-		virtual/jpeg
+		virtual/jpeg:0
 		media-libs/libpng:0= sys-libs/zlib
 	)
 	xslt? ( dev-libs/libxslt >=dev-libs/libxml2-2.6.8 )
@@ -282,11 +282,6 @@ src_prepare() {
 	# Get the alpha/beta/rc version
 	sed -re	"s|^(PHP_EXTRA_VERSION=\").*(\")|\1-pl${PR/r/}-gentoo\2|g" \
 		-i configure.in || die "Unable to change PHP branding"
-
-
-	epatch "${FILESDIR}"/iodbc-pkgconfig-r1.patch
-	epatch "${FILESDIR}"/stricter-libc-client-symlink-check.patch
-	epatch "${FILESDIR}"/all_strict_aliasing.patch
 
 	# Patch PHP to show Gentoo as the server platform
 	sed -e 's/PHP_UNAME=`uname -a | xargs`/PHP_UNAME=`uname -s -n -r -v | xargs`/g' \
@@ -666,6 +661,7 @@ src_install() {
 	if use_if_iuse opcache ; then
 		if [[ ${CHOST} == *-darwin* ]]; then
 			dolib.so "modules/opcache.bundle" || die "Unable to install opcache module"
+			dosym "modules/opcache.bundle" "modules/opcache.so"
 		else
 			dolib.so "modules/opcache$(get_libname)" || die "Unable to install opcache module"
 		fi
