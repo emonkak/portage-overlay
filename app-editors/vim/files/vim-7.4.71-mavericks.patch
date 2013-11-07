@@ -1,0 +1,15 @@
+diff --git a/src/os_unix.c b/src/os_unix.c
+index bb4c10e..00d9728 100644
+--- a/src/os_unix.c
++++ b/src/os_unix.c
+@@ -18,6 +18,10 @@
+  * changed beyond recognition.
+  */
+ 
++#if defined(__APPLE__)
++#include <AvailabilityMacros.h>
++#endif
++
+ /*
+  * Some systems have a prototype for select() that has (int *) instead of
+  * (fd_set *), which is wrong. This define removes that prototype. We define

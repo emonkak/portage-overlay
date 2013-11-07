@@ -75,6 +75,9 @@ src_prepare() {
 		fi
 	fi
 
+	# http://codepad.org/Mzsik2R8
+	epatch "${FILESDIR}/vim-7.4.71-mavericks.patch"
+
 	# Fixup a script to use awk instead of nawk
 	sed -i '1s|.*|#!'"${EPREFIX}"'/usr/bin/awk -f|' "${S}"/runtime/tools/mve.awk \
 		|| die "mve.awk sed failed"
