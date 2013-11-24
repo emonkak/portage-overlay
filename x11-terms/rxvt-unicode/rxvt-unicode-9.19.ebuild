@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.18.ebuild,v 1.1 2013/04/08 10:28:00 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.19.ebuild,v 1.2 2013/11/08 15:56:03 wired Exp $
 
 EAPI=4
 inherit autotools eutils
@@ -42,7 +42,8 @@ src_prepare() {
 	# fix for prefix not installing properly
 	epatch \
 		"${FILESDIR}"/${PN}-9.06-case-insensitive-fs.patch \
-		"${FILESDIR}"/${PN}-9.15-xsubpp.patch
+		"${FILESDIR}"/${PN}-9.15-xsubpp.patch \
+		"${FILESDIR}"/${PN}-9.19-fading.patch
 
 	if ! use vanilla; then
 		ewarn "You are going to include unsupported third-party bug fixes/features."
@@ -61,7 +62,7 @@ src_prepare() {
 		epatch "${FILESDIR}"/${PN}-9.05_no-MOTIF-WM-INFO.patch
 
 		# support for wheel scrolling on secondary screens
-		use secondary-wheel && epatch "${FILESDIR}"/${PN}-9.14-secondary-wheel.patch
+		use secondary-wheel && epatch "${FILESDIR}"/${PN}-9.19-secondary-wheel.patch
 
 		# ctrl-l buffer fix
 		use buffer-on-clear && epatch "${FILESDIR}"/${PN}-9.14-clear.patch
