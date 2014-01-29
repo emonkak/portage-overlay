@@ -1,6 +1,6 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-editors/vim/vim-7.4.94.ebuild,v 1.1 2013/11/19 10:25:01 radhermit Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-editors/vim/vim-7.4.155.ebuild,v 1.1 2014/01/23 10:32:21 radhermit Exp $
 
 EAPI=5
 VIM_VERSION="7.4"
@@ -77,8 +77,6 @@ src_prepare() {
 		fi
 	fi
 
-	epatch "${FILESDIR}/vim-7.4.035-breakindent.patch"
-
 	# Fixup a script to use awk instead of nawk
 	sed -i '1s|.*|#!'"${EPREFIX}"'/usr/bin/awk -f|' "${S}"/runtime/tools/mve.awk \
 		|| die "mve.awk sed failed"
@@ -123,8 +121,7 @@ src_prepare() {
 
 	# Try to avoid sandbox problems. Bug #114475.
 	if [[ -d "${S}"/src/po ]] ; then
-		sed -i -e \
-			'/-S check.vim/s,..VIM.,ln -s $(VIM) testvim \; ./testvim -X,' \
+		sed -i '/-S check.vim/s,..VIM.,ln -s $(VIM) testvim \; ./testvim -X,' \
 			"${S}"/src/po/Makefile
 	fi
 
@@ -189,7 +186,7 @@ src_configure() {
 		myconf+=" $(use_enable acl)"
 		myconf+=" $(use_enable cscope)"
 		myconf+=" $(use_enable gpm)"
-		myconf+=" $(use_enable lua luainterp)"
+		myconf+=" $(use_enable lua luainterp) --with-lua-prefix=${EPREFIX}/usr"
 		myconf+=" $(use_with luajit)"
 		myconf+=" $(use_enable nls)"
 		myconf+=" $(use_enable perl perlinterp)"
@@ -213,7 +210,7 @@ src_configure() {
 		# --with-features=huge forces on cscope even if we --disable it. We need
 		# to sed this out to avoid screwiness. (1 Sep 2004 ciaranm)
 		if ! use cscope ; then
-			sed -i -e '/# define FEAT_CSCOPE/d' src/feature.h || \
+			sed -i '/# define FEAT_CSCOPE/d' src/feature.h || \
 				die "couldn't disable cscope"
 		fi
 
@@ -259,14 +256,13 @@ src_test() {
 
 	# Test 49 won't work inside a portage environment
 	einfo "Test 49 isn't sandbox-friendly, so it will be skipped."
-	sed -i -e 's~test49.out~~g' Makefile
+	sed -i 's~test49.out~~g' Makefile
 
 	# We don't want to rebuild vim before running the tests
-	sed -i -e 's,: \$(VIMPROG),: ,' Makefile
+	sed -i 's,: \$(VIMPROG),: ,' Makefile
 
 	# Don't try to do the additional GUI test
-	emake -j1 VIMPROG=../vim nongui \
-		|| die "At least one test failed"
+	emake -j1 VIMPROG=../vim nongui
 }
 
 # Make convenience symlinks, hopefully without stepping on toes.  Some
