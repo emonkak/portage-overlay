@@ -1,6 +1,6 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/php/php-5.5.5.ebuild,v 1.1 2013/10/18 11:10:49 olemarkus Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/php/php-5.6.0_alpha1.ebuild,v 1.1 2014/01/28 15:41:41 olemarkus Exp $
 
 EAPI=5
 
@@ -12,7 +12,7 @@ function php_get_uri ()
 {
 	case "${1}" in
 		"php-pre")
-			echo "http://downloads.php.net/dsp/${2}"
+			echo "http://downloads.php.net/tyrael/${2}"
 		;;
 		"php")
 			echo "http://www.php.net/distributions/${2}"
