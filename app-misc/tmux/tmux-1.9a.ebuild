@@ -1,9 +1,8 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tmux/tmux-1.8.ebuild,v 1.2 2013/03/27 15:33:02 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tmux/tmux-1.9a.ebuild,v 1.1 2014/02/25 07:00:37 radhermit Exp $
 
 EAPI=5
-
 AUTOTOOLS_AUTORECONF=true
 
 inherit autotools-utils bash-completion-r1 flag-o-matic
@@ -15,7 +14,7 @@ SRC_URI="mirror://sourceforge/tmux/${P}.tar.gz"
 LICENSE="ISC"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x64-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
-IUSE="vim-syntax cjk"
+IUSE="debug vim-syntax cjk"
 
 COMMON_DEPEND="
 	>=dev-libs/libevent-2.0.10
@@ -29,18 +28,18 @@ RDEPEND="${COMMON_DEPEND}
 
 DOCS=( CHANGES FAQ README TODO )
 
-PATCHES=( "${FILESDIR}"/${PN}-1.7-terminfo.patch )
+PATCHES=( "${FILESDIR}"/${P}-flags.patch )
 
 pkg_setup() {
-	if has_version "<app-misc/tmux-1.7"; then
+	if has_version "<app-misc/tmux-1.9a"; then
 		echo
 		ewarn "Some configuration options changed in this release."
 		ewarn "Please read the CHANGES file in /usr/share/doc/${PF}/"
 		ewarn
-		ewarn "WARNING: after updating to ${P} you will _not_ be able to connect to any"
-		ewarn "running 1.6 tmux server instances. You'll have to use an existing client to"
+		ewarn "WARNING: After updating to ${P} you will _not_ be able to connect to any"
+		ewarn "older, running tmux server instances. You'll have to use an existing client to"
 		ewarn "end your old sessions or kill the old server instances. Otherwise you'll have"
-		ewarn "to temporarily downgrade to tmux 1.6 to access them."
+		ewarn "to temporarily downgrade to access them."
 		echo
 	fi
 }
@@ -50,20 +49,25 @@ src_prepare() {
 		epatch "${FILESDIR}"/tmux-1.2-cjkwidth.patch
 		epatch "${FILESDIR}"/tmux-1.7-vt100-border.patch
 	fi
-
-	# look for config file in the prefix
-	sed -i -e '/SYSTEM_CFG/s:"/etc:"'"${EPREFIX}"'/etc:' tmux.h || die
-	# and don't just add some includes
-	sed -i -e 's:-I/usr/local/include::' Makefile.am || die
-
 	# bug 438558
 	# 1.7 segfaults when entering copy mode if compiled with -Os
 	replace-flags -Os -O2
 
 	# regenerate aclocal.m4 to support earlier automake versions
-	rm aclocal.m4
+	rm aclocal.m4 || die
+
+	# remove generated files
+	rm -r compat/.{dirstamp,deps} || die
 
 	autotools-utils_src_prepare
+}
+
+src_configure() {
+	local myeconfargs=(
+		--sysconfdir="${EPREFIX}"/etc
+		$(use_enable debug)
+	)
+	autotools-utils_src_configure
 }
 
 src_install() {
