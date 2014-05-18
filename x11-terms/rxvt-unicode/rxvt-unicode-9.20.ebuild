@@ -1,6 +1,6 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.19.ebuild,v 1.2 2013/11/08 15:56:03 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.20.ebuild,v 1.8 2014/05/14 16:10:08 ago Exp $
 
 EAPI=4
 inherit autotools eutils
@@ -11,7 +11,7 @@ SRC_URI="http://dist.schmorp.de/rxvt-unicode/Attic/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris"
+KEYWORDS="~alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris"
 IUSE="
 	256-color alt-font-width blink buffer-on-clear +focused-urgency
 	fading-colors +font-styles iso14755 +mousewheel +perl pixbuf secondary-wheel
@@ -42,8 +42,7 @@ src_prepare() {
 	# fix for prefix not installing properly
 	epatch \
 		"${FILESDIR}"/${PN}-9.06-case-insensitive-fs.patch \
-		"${FILESDIR}"/${PN}-9.15-xsubpp.patch \
-		"${FILESDIR}"/${PN}-9.19-fading.patch
+		"${FILESDIR}"/${PN}-9.15-xsubpp.patch
 
 	if ! use vanilla; then
 		ewarn "You are going to include unsupported third-party bug fixes/features."
@@ -128,7 +127,7 @@ pkg_postinst() {
 	if use secondary-wheel; then
 		elog "You have enabled the secondary-wheel USE flag."
 		elog "This allows you to scroll in secondary screens"
-		elog "(like mutt's message list/view) using the mouse wheel."
+		elog "(like mutt's message list/view or nano) using the mouse wheel."
 		elog
 		elog "To actually enable the feature you have to add"
 		elog "  URxvt*secondaryWheel: true"
