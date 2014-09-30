@@ -1,0 +1,21 @@
+Fix build with old gcc
+https://bugs.php.net/bug.php?id=68114
+--- a/ext/mysqlnd/config9.m4.orig	2014-10-15 07:59:32.000000000 -0500
++++ b/ext/mysqlnd/config9.m4	2014-11-03 19:27:08.000000000 -0600
+@@ -55,6 +55,8 @@
+ dnl References: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1657.pdf
+ dnl http://speleotrove.com/decimal/
+ dnl
++old_CFLAGS=$CFLAGS
++CFLAGS="$CFLAGS -O0"
+ AC_CACHE_CHECK([whether whether compiler supports Decimal32/64/128 types], ac_cv_decimal_fp_supported,[
+ AC_TRY_RUN( [
+ #include <stdio.h>
+@@ -72,6 +74,7 @@
+ ],[
+   ac_cv_decimal_fp_supported=no
+ ])])
++CFLAGS=$old_CFLAGS
+ if test "$ac_cv_decimal_fp_supported" = "yes"; then
+   AC_DEFINE(HAVE_DECIMAL_FP_SUPPORT, 1, [Define if the compiler supports Decimal32/64/128 types.])
+ fi
