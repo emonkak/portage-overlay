@@ -5,7 +5,7 @@
 
 EAPI=5
 PHP_EXT_NAME="timecop"
-USE_PHP="php5-3 php5-4 php5-5"
+USE_PHP="php5-3 php5-4 php5-5 php5-6"
 
 inherit git-2 php-ext-source-r2
 
