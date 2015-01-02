@@ -15,6 +15,7 @@ IUSE="mecab"
 
 DEPEND="app-text/groonga
 virtual/mysql
+virtual/pkgconfig
 mecab? ( app-text/mecab )
 "
 RDEPEND="${DEPEND}"
@@ -23,13 +24,14 @@ RESTRICT="mirror"
 
 pkg_pretend() {
 	if [ ! -d ${EPREFIX}/usr/src/mysql ]; then
-		eerror "MySQL source does not exists"
-		eerror "You must put it to ${EPREFIX}/usr/src/mysql"
+		eerror "MySQL source does not exist"
+		eerror "You must put the source to ${EPREFIX}/usr/src/mysql"
 	fi
 }
 
 src_configure() {
 	econf \
+		$(use_with mecab) \
 		--with-mysql-source=${EPREFIX}/usr/src/mysql \
 		--with-mysql-config=${EPREFIX}/usr/bin/mysql_config
 }
