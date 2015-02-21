@@ -67,9 +67,7 @@ src_prepare() {
 	else
 		rm -vf librsync.so.1 || die
 	fi
-	mv cffi-0.7.2-py2.7-*.egg dropbox_sqlite_ext-0.0-py2.7.egg distribute-0.6.26-py2.7.egg "${T}" || die
-	rm -rf *.egg library.zip || die
-	mv "${T}"/cffi-0.7.2-py2.7-*.egg "${T}"/dropbox_sqlite_ext-0.0-py2.7.egg "${T}"/distribute-0.6.26-py2.7.egg "${S}" || die
+	rm -f library.zip || die
 	ln -s dropbox library.zip || die
 	pax-mark cm dropbox
 	mv README ACKNOWLEDGEMENTS "${T}" || die
