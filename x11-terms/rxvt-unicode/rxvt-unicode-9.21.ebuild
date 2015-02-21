@@ -1,17 +1,17 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.20.ebuild,v 1.8 2014/05/14 16:10:08 ago Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-terms/rxvt-unicode/rxvt-unicode-9.21.ebuild,v 1.2 2015/01/14 14:49:39 jer Exp $
 
-EAPI=4
+EAPI=5
 inherit autotools eutils
 
 DESCRIPTION="rxvt clone with xft and unicode support"
 HOMEPAGE="http://software.schmorp.de/pkg/rxvt-unicode.html"
 SRC_URI="http://dist.schmorp.de/rxvt-unicode/Attic/${P}.tar.bz2"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris"
 IUSE="
 	256-color alt-font-width blink buffer-on-clear +focused-urgency
 	fading-colors +font-styles iso14755 +mousewheel +perl pixbuf secondary-wheel
@@ -22,7 +22,7 @@ RDEPEND="
 	>=sys-libs/ncurses-5.7-r6
 	kernel_Darwin? ( dev-perl/Mac-Pasteboard )
 	media-libs/fontconfig
-	perl? ( dev-lang/perl )
+	perl? ( dev-lang/perl:= )
 	pixbuf? ( x11-libs/gdk-pixbuf x11-libs/gtk+:2 )
 	startup-notification? ( x11-libs/startup-notification )
 	x11-libs/libX11
@@ -42,7 +42,7 @@ src_prepare() {
 	# fix for prefix not installing properly
 	epatch \
 		"${FILESDIR}"/${PN}-9.06-case-insensitive-fs.patch \
-		"${FILESDIR}"/${PN}-9.15-xsubpp.patch
+		"${FILESDIR}"/${PN}-9.21-xsubpp.patch
 
 	if ! use vanilla; then
 		ewarn "You are going to include unsupported third-party bug fixes/features."
@@ -75,6 +75,8 @@ src_prepare() {
 
 	# kill the rxvt-unicode terminfo file - #192083
 	sed -i -e "/rxvt-unicode.terminfo/d" doc/Makefile.in || die "sed failed"
+
+	epatch_user
 
 	eautoreconf
 }
