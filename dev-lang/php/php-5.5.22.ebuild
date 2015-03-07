@@ -1,12 +1,12 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/php/php-5.6.4.ebuild,v 1.2 2014/12/28 15:27:17 titanofold Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/php/php-5.5.22.ebuild,v 1.3 2015/02/26 07:22:49 jer Exp $
 
 EAPI=5
 
 inherit eutils autotools flag-o-matic versionator depend.apache apache-module db-use libtool systemd
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
 
 function php_get_uri ()
 {
@@ -319,8 +319,6 @@ src_prepare() {
 		# http://bugs.php.net/bug.php?id=48795, bug #343481
 		sed -i -e '/BUILD_CGI="\\$(CC)/s/CC/CXX/' configure || die
 	fi
-
-	epatch "${FILESDIR}/patch-php56-ext-mysqlnd-config9.m4.diff.patch"
 }
 
 src_configure() {
@@ -358,7 +356,7 @@ src_configure() {
 	$(use_with gmp gmp "${EPREFIX}"/usr)
 	$(use_enable hash hash )
 	$(use_with mhash mhash "${EPREFIX}"/usr)
-	$(use_with iconv iconv $(use elibc_glibc || echo "${EPREFIX}"/usr))
+	$(use_with iconv iconv $(use elibc_glibc || use elibc_musl || echo "${EPREFIX}"/usr))
 	$(use_enable intl intl )
 	$(use_enable ipv6 ipv6 )
 	$(use_enable json json )
