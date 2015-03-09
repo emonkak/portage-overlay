@@ -4,19 +4,28 @@
 
 DESCRIPTION="Jisyo (dictionary) files for the SKK Japanese-input software"
 HOMEPAGE="http://tomoch.s28.xrea.com/"
-SRC_URI=""
+SRC_URI="http://tomoch.s28.xrea.com/ime.cgi"
 
 LICENSE="public-domain"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ppc ~sparc ~x86"
 IUSE="cdb"
 
-DEPEND="sys-libs/glibc
+DEPEND="virtual/libiconv
 	sys-apps/gawk
 	cdb? ( dev-db/cdb )"
 
+S=${WORKDIR}
+
 src_unpack() {
-	wget -q "http://tomoch.s28.xrea.com/ime.cgi" -O - | awk '
+	cp "${DISTDIR}/${A}" "${S}" || die
+}
+
+src_compile() {
+	# bug 184457
+	unset LANG LC_ALL LC_CTYPE
+
+	awk '
 		BEGIN {
 			print ";; okuri-ari entries."
 			print ";; okuri-nasi entries."
@@ -28,12 +37,7 @@ src_unpack() {
 		  /^[^<]/ {
 			print $1 " /" $2 "/"
 		}
-	' ${A} | iconv -f UTF-8 -t EUC-JP-MS > SKK-JISYO.seiyu || die
-}
-
-src_compile() {
-	# bug 184457
-	unset LANG LC_ALL LC_CTYPE
+	' "${A}" | iconv -f UTF-8 -t EUC-JP//ignore > SKK-JISYO.seiyu || die
 
 	if use cdb ; then
 		awk '
