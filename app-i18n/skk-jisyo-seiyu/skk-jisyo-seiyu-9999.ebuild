@@ -4,7 +4,7 @@
 
 DESCRIPTION="Jisyo (dictionary) files for the SKK Japanese-input software"
 HOMEPAGE="http://tomoch.s28.xrea.com/"
-SRC_URI="http://tomoch.s28.xrea.com/ime.cgi"
+SRC_URI=""
 
 LICENSE="public-domain"
 SLOT="0"
@@ -12,13 +12,14 @@ KEYWORDS="~alpha ~amd64 ~ppc ~sparc ~x86"
 IUSE="cdb"
 
 DEPEND="virtual/libiconv
+	net-misc/wget
 	sys-apps/gawk
 	cdb? ( dev-db/cdb )"
 
 S=${WORKDIR}
 
 src_unpack() {
-	cp "${DISTDIR}/${A}" "${S}" || die
+	wget http://tomoch.s28.xrea.com/ime.cgi --no-cache
 }
 
 src_compile() {
@@ -37,7 +38,7 @@ src_compile() {
 		  /^[^<]/ {
 			print $1 " /" $2 "/"
 		}
-	' "${A}" | iconv -f UTF-8 -t EUC-JP//ignore > SKK-JISYO.seiyu || die
+	' ime.cgi | iconv -f UTF-8 -t EUC-JP//ignore > SKK-JISYO.seiyu || die
 
 	if use cdb ; then
 		awk '
