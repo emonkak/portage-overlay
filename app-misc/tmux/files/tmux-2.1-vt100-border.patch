@@ -1,0 +1,22 @@
+--- tty-acs.c.orig	2015-11-22 22:32:00.130295647 +0900
++++ tty-acs.c	2015-11-22 22:32:07.542276363 +0900
+@@ -81,7 +81,7 @@
+ 	struct tty_acs_entry *entry;
+ 
+ 	/* If not a UTF-8 terminal, use the ACS set. */
+-	if (tty != NULL && !(tty->flags & TTY_UTF8)) {
++	if (tty != NULL) {
+ 		if (tty->term->acs[ch][0] == '\0')
+ 			return (NULL);
+ 		return (&tty->term->acs[ch][0]);
+--- tty.c.orig	2015-11-22 22:32:19.332247704 +0900
++++ tty.c	2015-11-22 22:32:26.448230404 +0900
+@@ -54,7 +54,7 @@
+ void	tty_default_colours(struct grid_cell *, const struct window_pane *);
+ 
+ #define tty_use_acs(tty) \
+-	(tty_term_has((tty)->term, TTYC_ACSC) && !((tty)->flags & TTY_UTF8))
++	(tty_term_has((tty)->term, TTYC_ACSC))
+ 
+ #define tty_pane_full_width(tty, ctx) \
+ 	((ctx)->xoff == 0 && screen_size_x((ctx)->wp->screen) >= (tty)->sx)
