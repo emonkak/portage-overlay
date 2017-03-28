@@ -2,8 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
-inherit python
+EAPI=6
+PYTHON_COMPAT=( python{2_7,3_4} )
+
+inherit python-r1
 
 DESCRIPTION="An mms:// downloader client"
 HOMEPAGE="https://savannah.nongnu.org/projects/mimms/"
@@ -14,8 +16,6 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-python_dep=">=dev-lang/python-2.5
-            <dev-lang/python-3.0"
 DEPEND="media-libs/libmms"
 RDEPEND="${DEPEND}"
 
