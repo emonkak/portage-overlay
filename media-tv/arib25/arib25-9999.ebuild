@@ -4,7 +4,7 @@
 
 EAPI=6
 
-inherit cmake-utils git-r3
+inherit cmake-multilib git-r3
 
 DESCRIPTION="ARIB STD-B25 test implementation for understanding specs"
 HOMEPAGE="https://github.com/stz2012/libarib25"
@@ -22,4 +22,12 @@ src_prepare() {
 	cmake-utils_src_prepare
 
 	rm -v "${S}/cmake/PostInstall.cmake"
+}
+
+src_install() {
+	cmake-multilib_src_install
+
+	if [[ $(get_libdir) != lib ]]; then
+		mv "${ED}"/usr/lib "${ED}"/usr/$(get_libdir) || die
+	fi
 }

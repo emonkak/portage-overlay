@@ -17,6 +17,7 @@ KEYWORDS="~alpha amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86"
 IUSE="+b25"
 
 DEPEND="virtual/pkgconfig
+        sys-apps/pcsc-lite
         b25? ( media-tv/arib25 )"
 RDEPEND="${DEPEND}"
 
