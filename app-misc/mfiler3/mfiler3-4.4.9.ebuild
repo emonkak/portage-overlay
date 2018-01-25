@@ -50,10 +50,6 @@ src_compile() {
 }
 
 src_install() {
-	einstall sysconfdir="${D%/}/${EPREFIX}/etc/mfiler3" || die "einstall failed"
-}
-
-pkg_postinst() {
-	elog "You need to compile."
-	elog "\$ saphire -c 'compile ${EPREFIX}/etc/mfiler3/mfiler3.sa'"
+	einstall sysconfdir="${ED}/etc/mfiler3" || die "einstall failed"
+	saphire -c 'compile ${ED}/etc/mfiler3/mfiler3.sa'
 }

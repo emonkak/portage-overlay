@@ -50,11 +50,7 @@ src_compile() {
 
 src_install() {
 	einstall docdir="${ED}/usr/share/doc/saphire" sysconfdir="${ED}/etc/saphire" || die "einstall failed"
-}
-
-pkg_postinst() {
-	elog "You need to compile."
-	elog "\$ saphire -rn -c 'compile ${EPREFIX}/etc/saphire/completion.sa'"
-	elog "\$ saphire -rn -c 'compile ${EPREFIX}/etc/saphire/shelp'"
-	elog "\$ saphire -rn -c 'compile ${EPREFIX}/etc/saphire/saphire.sa'"
+	./saphire -rn -c "compile ${ED}/etc/saphire/completion.sa"
+	./saphire -rn -c "compile ${ED}/etc/saphire/shelp"
+	./saphire -rn -c "compile ${ED}/etc/saphire/saphire.sa"
 }
