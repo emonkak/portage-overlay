@@ -6,8 +6,6 @@ EAPI=3
 
 inherit eutils autotools
 
-EAPI=3
-
 DESCRIPTION="Source code package organizer"
 HOMEPAGE="http://paco.sourceforge.net/"
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
