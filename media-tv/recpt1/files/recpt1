@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export LD_PRELOAD=/opt/recpt1/lib/libpcsclite.so.1.0.0
+
+exec /opt/recpt1/bin/recpt1 $@
