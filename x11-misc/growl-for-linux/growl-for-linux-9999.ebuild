@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-misc/growl-for-linux/growl-for-linux-0.2.ebuild,v 1.1 2011/05/01 03:47:51 matsuu Exp $
 
-EAPI=3
+EAPI=6
 inherit git-r3 multilib
 
 EGIT_REPO_URI="git://github.com/mattn/growl-for-linux.git"
