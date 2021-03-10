@@ -2,18 +2,18 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=6
-PYTHON_COMPAT=( python{2_7,3_4} )
+EAPI=7
+PYTHON_COMPAT=( python3_{7..9} )
 
-inherit python-r1
+inherit distutils-r1
 
 DESCRIPTION="An mms:// downloader client"
 HOMEPAGE="https://savannah.nongnu.org/projects/mimms/"
-SRC_URI="http://download.savannah.gnu.org/releases-noredirect/mimms/${P}.tar.bz2"
+SRC_URI="https://download.savannah.gnu.org/releases/mimms/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="x86 amd64"
 IUSE=""
 
 DEPEND="media-libs/libmms"
