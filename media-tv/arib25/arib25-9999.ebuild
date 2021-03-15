@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=6
+EAPI=7
 
 inherit cmake-multilib git-r3
 
@@ -21,13 +21,5 @@ RDEPEND="${DEPEND}"
 src_prepare() {
 	cmake-utils_src_prepare
 
-	rm -v "${S}/cmake/PostInstall.cmake"
-}
-
-src_install() {
-	cmake-multilib_src_install
-
-	if [[ $(get_libdir) != lib ]]; then
-		mv "${ED}"/usr/lib "${ED}"/usr/$(get_libdir) || die
-	fi
+	rm -v "${S}/cmake/PostInstall.cmake" || die
 }
