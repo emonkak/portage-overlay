@@ -16,11 +16,11 @@ KEYWORDS="amd64 x86"
 IUSE=""
 
 DEPEND="dev-libs/openssl
-        dev-qt/qtcore:5
-        dev-qt/qtgui:5
-        dev-qt/qtnetwork
-        dev-qt/qtsql:5
-        sys-libs/glibc"
+	dev-qt/qtcore:5
+	dev-qt/qtgui:5
+	dev-qt/qtnetwork
+	dev-qt/qtsql:5
+	sys-libs/glibc"
 RDEPEND="${DEPEND}"
 
 src_configure() {
