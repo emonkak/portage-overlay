@@ -10,7 +10,7 @@ SRC_URI="https://github.com/mozilla/${PN}/archive/v${PV}.tar.gz"
 
 LICENSE="BSD IJG"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="sys-libs/zlib"

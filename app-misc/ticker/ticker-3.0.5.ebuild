@@ -479,7 +479,7 @@ SRC_URI="https://github.com/achannarasappa/ticker/archive/v${PV}.tar.gz -> ${P}.
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 
 src_compile() {
 	go build -v || die

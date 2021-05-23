@@ -19,7 +19,7 @@ HOMEPAGE="https://github.com/schemalex/schemalex"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 
 DEPEND="dev-go/glide"
 RDEPEND="${DEPEND}"

@@ -10,7 +10,7 @@ SRC_URI="mirror://sourceforge.jp/sash/54458/${P}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="x86 amd64 x64-macos x86-macos"
+KEYWORDS="~x86 ~amd64 ~x64-macos ~x86-macos"
 IUSE="debug gprof migemo"
 RESTRICT="mirror strip"
 

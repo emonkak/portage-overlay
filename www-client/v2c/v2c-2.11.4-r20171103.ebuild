@@ -15,7 +15,7 @@ https://cldup.com/qxm37De6Y5.gz -> ${MY_JAR}.pack.gz"
 
 LICENSE="Custom"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 RESTRICT="mirror"
 

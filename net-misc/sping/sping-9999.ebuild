@@ -476,7 +476,7 @@ EGIT_REPO_URI="https://github.com/benjojo/sping.git"
 
 LICENSE=""
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 
 src_unpack() {
 	git-r3_src_unpack

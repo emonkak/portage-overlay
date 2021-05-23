@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/FD-/RPiPlay.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 
 DEPEND="media-libs/gst-plugins-base
 	media-libs/gstreamer
