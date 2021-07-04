@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=7
 inherit eutils
 
 DESCRIPTION="This program is a traditional Japanese style 2pain file manager
@@ -26,30 +26,27 @@ DEPEND="!app-misc/mfiler2
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-	sed -e 's!%s/\(utf-8\|euc-jp\|cp932\)/migemo-dict!%s/migemo-dict!' \
-	    -e 's!%s/\(utf-8\|euc-jp\|cp932\)/roma2hira.dat!%s/roma2hira.dat!' \
-	    -e 's!%s/\(utf-8\|euc-jp\|cp932\)/hira2kata.dat!%s/hira2kata.dat!' \
-	    -e 's!%s/\(utf-8\|euc-jp\|cp932\)/han2zen.dat!%s/han2zen.dat!' \
-	    -i isearch.c || die "sed failed"
+	eapply_user
+	sed \
+		-e 's!^CC=!CC?=!' \
+		-e "s!^CFLAGS=@CFLAGS@\$!CFLAGS+=-I${EPREFIX}/usr/include -L${EPREFIX}/usr/$(eval echo \$LIBDIR_${ABI}) -I .!" \
+		-e 's!^LIBS=@LIBS@$!& -ltinfo!' \
+		-e 's!^\(\t$(CC) -o mattr mattr.c\) -lcurses$!\1 -lncurses -ltinfo $(CFLAGS)!' \
+		-e 's!^docdir=@docdir@mfiler3$!docdir=@docdir@!' \
+		-i Makefile.in || die "sed failed"
+	sed \
+		-e 's!%s/\(utf-8\|euc-jp\|cp932\)/\(migemo-dict\|roma2hira.dat\|hira2kata.dat\|han2zen.dat\)!%s/\2!' \
+		-i isearch.c || die "sed failed"
 }
 
 src_configure() {
-	local myconf="--sysconfdir=${EPREFIX}/etc/mfiler3"
+	local myconf=""
 	use debug && myconf+=" --with-debug"
 	use migemo && myconf+=" --with-migemo --with-system-migemodir=${EPREFIX}/usr/share/migemo"
 	use socket && myconf+=" --with-socket"
-	econf ${myconf} || die "econf failed"
-}
-
-src_compile() {
-	sed -e 's/^CC=/CC?=/' \
-	    -e 's/^CFLAGS=/CFLAGS+=/' \
-	    -e '/^\tinstall -m 644 mfiler3\.sao/d' \
-	    -i Makefile || die "sed failed"
-	emake mfiler3 mattr || die "emake failed"
+	econf ${myconf}
 }
 
 src_install() {
-	einstall sysconfdir="${ED}/etc/mfiler3" || die "einstall failed"
-	saphire -c 'compile ${ED}/etc/mfiler3/mfiler3.sa'
+	emake DESTDIR="${ED}" dest-install
 }
