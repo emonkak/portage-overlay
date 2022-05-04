@@ -1,0 +1,48 @@
+diff --git a/internal/ui/component/summary/summary.go b/internal/ui/component/summary/summary.go
+index 4d9f389..1940789 100644
+--- a/internal/ui/component/summary/summary.go
++++ b/internal/ui/component/summary/summary.go
+@@ -69,7 +69,7 @@ func (m Model) View() string {
+ 			{
+ 				Width: m.Width,
+ 				Cells: []grid.Cell{
+-					{Text: m.styles.TextLine(strings.Repeat("━", m.Width))},
++					{Text: m.styles.TextLine(strings.Repeat("-", m.Width))},
+ 				},
+ 			},
+ 		},
+@@ -84,8 +84,8 @@ func quoteChangeText(change float64, changePercent float64, styles c.Styles) str
+ 	}
+ 
+ 	if change > 0.0 {
+-		return styles.TextPrice(changePercent, "↑ "+u.ConvertFloatToString(change, false)+" ("+u.ConvertFloatToString(changePercent, false)+"%)")
++		return styles.TextPrice(changePercent, "↑"+u.ConvertFloatToString(change, false)+" ("+u.ConvertFloatToString(changePercent, false)+"%)")
+ 	}
+ 
+-	return styles.TextPrice(changePercent, "↓ "+u.ConvertFloatToString(change, false)+" ("+u.ConvertFloatToString(changePercent, false)+"%)")
++	return styles.TextPrice(changePercent, "↓"+u.ConvertFloatToString(change, false)+" ("+u.ConvertFloatToString(changePercent, false)+"%)")
+ }
+diff --git a/internal/ui/component/watchlist/watchlist.go b/internal/ui/component/watchlist/watchlist.go
+index 00bdebe..adea863 100644
+--- a/internal/ui/component/watchlist/watchlist.go
++++ b/internal/ui/component/watchlist/watchlist.go
+@@ -389,7 +389,7 @@ func textVolumeMarketCapLabels(asset c.Asset, styles c.Styles) string {
+ }
+ 
+ func textSeparator(width int, styles c.Styles) string {
+-	return styles.TextLine(strings.Repeat("─", width))
++	return styles.TextLine(strings.Repeat("-", width))
+ }
+ 
+ func textTags(asset c.Asset, styles c.Styles) string {
+@@ -433,8 +433,8 @@ func quoteChangeText(change float64, changePercent float64, isVariablePrecision
+ 	}
+ 
+ 	if change > 0.0 {
+-		return styles.TextPrice(changePercent, "↑ "+u.ConvertFloatToString(change, isVariablePrecision)+" ("+u.ConvertFloatToString(changePercent, false)+"%)")
++		return styles.TextPrice(changePercent, "↑"+u.ConvertFloatToString(change, isVariablePrecision)+" ("+u.ConvertFloatToString(changePercent, false)+"%)")
+ 	}
+ 
+-	return styles.TextPrice(changePercent, "↓ "+u.ConvertFloatToString(change, isVariablePrecision)+" ("+u.ConvertFloatToString(changePercent, false)+"%)")
++	return styles.TextPrice(changePercent, "↓"+u.ConvertFloatToString(change, isVariablePrecision)+" ("+u.ConvertFloatToString(changePercent, false)+"%)")
+ }
