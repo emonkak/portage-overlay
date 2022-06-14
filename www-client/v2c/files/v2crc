@@ -1,1 +1,1 @@
-auxargs="-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Dawt.useSystemAAFontSettings=lcd -Dv2c.launcher.localpath='/tmp'"
+auxargs="-Dawt.useSystemAAFontSettings=lcd -Dsun.java2d.uiScale=1.0 -Dv2c.launcher.localpath='$HOME/.v2c'"

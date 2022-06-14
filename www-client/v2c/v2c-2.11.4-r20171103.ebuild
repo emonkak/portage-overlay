@@ -33,9 +33,9 @@ src_unpack() {
 
 src_prepare() {
 	eapply_user
-	sed -e "s|v2cargs.txt|/tmp/v2cargs.txt|" \
-	    -e "s|v2clog.txt|/tmp/v2clog.txt|" \
-	    -i v2c || die "sed failed"
+	sed -e 's|v2cargs.txt|$HOME/.v2c/v2cargs.txt|' \
+		-e 's|v2clog.txt|$HOME/.v2c/v2clog.txt|' \
+		-i v2c || die "sed failed"
 }
 
 src_install() {
