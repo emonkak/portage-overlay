@@ -4,7 +4,7 @@
 
 EAPI=7
 
-inherit cmake-multilib git-r3
+inherit cmake git-r3
 
 DESCRIPTION="ARIB STD-B25 test implementation for understanding specs"
 HOMEPAGE="https://github.com/stz2012/libarib25"
@@ -19,7 +19,7 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-	cmake-utils_src_prepare
+	cmake_src_prepare
 
 	rm -v "${S}/cmake/PostInstall.cmake" || die
 }

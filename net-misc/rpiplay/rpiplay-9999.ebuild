@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3
+inherit cmake git-r3
 
 DESCRIPTION="An open-source AirPlay mirroring server for the Raspberry Pi"
 HOMEPAGE="https://github.com/FD-/RPiPlay"
