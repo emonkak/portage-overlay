@@ -1,10 +1,8 @@
 # Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
-#!/bin/sh
 
-
-EAPI=6
+EAPI=7
 PHP_EXT_NAME="ast"
 USE_PHP="php7-0 php7-1 php7-2 php7-3 php7-4"
 
