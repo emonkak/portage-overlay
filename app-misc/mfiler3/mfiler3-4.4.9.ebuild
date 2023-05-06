@@ -33,6 +33,7 @@ src_prepare() {
 		-e 's!^LIBS=@LIBS@$!& -ltinfo!' \
 		-e 's!^\(\t$(CC) -o mattr mattr.c\) -lcurses$!\1 -lncurses -ltinfo $(CFLAGS)!' \
 		-e 's!^docdir=@docdir@mfiler3$!docdir=@docdir@!' \
+		-e 's!install -s!install!' \
 		-i Makefile.in || die "sed failed"
 	sed \
 		-e 's!%s/\(utf-8\|euc-jp\|cp932\)/\(migemo-dict\|roma2hira.dat\|hira2kata.dat\|han2zen.dat\)!%s/\2!' \

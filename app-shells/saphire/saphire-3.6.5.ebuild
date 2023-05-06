@@ -29,6 +29,8 @@ src_prepare() {
 		-e 's/^CFLAGS=/CFLAGS+=/' \
 		-e 's!^\tgcc -shared -o libsaphire\.so\.2\.0\.0!& -Wl,-soname=libsaphire.so.2!' \
 		-e 's!^docdir=@datadir@/doc/saphire$!docdir=@docdir@!' \
+		-e 's!\$(INSTALL) -s!$(INSTALL)!' \
+		-e 's!\$(INSTALL) -m 644 -s!$(INSTALL) -m 664!' \
 		-i Makefile.in || die "sed failed"
 	sed \
 		-e 's!%s/\(utf-8\|euc-jp\|cp932\)/\(migemo-dict\|roma2hira.dat\|hira2kata.dat\|han2zen.dat\)!%s/\2!' \
