@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 #!/bin/sh
 
-EAPI=7
+EAPI=8
 
-inherit autotools eutils git-r3 linux-mod
+inherit git-r3 linux-mod
 
 DESCRIPTION="PT3 driver for Linux"
 HOMEPAGE="https://github.com/m-tsudo/pt3"
