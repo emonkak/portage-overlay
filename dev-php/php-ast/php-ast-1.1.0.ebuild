@@ -4,7 +4,7 @@
 
 EAPI=7
 PHP_EXT_NAME="ast"
-USE_PHP="php7-0 php7-1 php7-2 php7-3 php7-4"
+USE_PHP="php8-0 php8-1 php8-2"
 
 inherit git-r3 php-ext-source-r3
 
