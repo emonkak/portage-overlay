@@ -3,7 +3,7 @@
 # $Id$
 #!/bin/sh
 
-EAPI=6
+EAPI=7
 
 EGO_PN="github.com/laurent22/${PN}"
 
