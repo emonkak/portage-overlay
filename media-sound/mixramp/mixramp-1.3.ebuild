@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-
 DESCRIPTION="A utility to analyse sound files and print out the volume profile of the start and end"
 HOMEPAGE="https://sourceforge.net/projects/mixramp/"
 SRC_URI="https://master.dl.sourceforge.net/project/mixramp/mixramp_${PV}.tgz"
@@ -22,7 +21,7 @@ RDEPEND="
 	)
 	mp3? (
 		media-sound/mpg123
-		dev-python/eyeD3
+		dev-python/eyed3
 	)
 	ogg? ( media-sound/vorbis-tools )
 "
