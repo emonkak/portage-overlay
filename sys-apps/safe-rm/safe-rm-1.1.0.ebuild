@@ -33,7 +33,7 @@ SRC_URI="http://launchpad.net/safe-rm/trunk/${PV}/+download/${P}.tar.gz
 RESTRICT="mirror"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 IUSE=""
 
 DEPEND=""
