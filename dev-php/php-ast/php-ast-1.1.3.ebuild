@@ -1,10 +1,10 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=7
+EAPI=8
+
 PHP_EXT_NAME="ast"
-USE_PHP="php8-0 php8-1 php8-2"
+USE_PHP="php7-2 php7-3 php7-4 php8-0 php8-1 php8-2 php8-3 php8-4 php8-5"
 
 inherit git-r3 php-ext-source-r3
 
@@ -17,7 +17,7 @@ EGIT_COMMIT="v${PV}"
 
 LICENSE="BSD-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 IUSE=""
 
 DEPEND=""
