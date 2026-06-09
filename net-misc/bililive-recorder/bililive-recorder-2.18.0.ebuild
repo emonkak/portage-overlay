@@ -293,6 +293,7 @@ DOTNET_PKG_BAD_PROJECTS=(
 
 PATCHES=(
     "${FILESDIR}/${PN}-2.18.0-remove-git-version.patch"
+    "${FILESDIR}/${PN}-2.18.0-fix-windows-invalid-filename-chars.patch"
 )
 
 DOCS=( README.md README_CN.md )

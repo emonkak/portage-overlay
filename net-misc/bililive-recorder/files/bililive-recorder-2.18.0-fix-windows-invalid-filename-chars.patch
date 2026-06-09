@@ -1,0 +1,33 @@
+diff --git a/BililiveRecorder.Core/Templating/FileNameGenerator.cs b/BililiveRecorder.Core/Templating/FileNameGenerator.cs
+index 0e6e30f..3a03d70 100644
+--- a/BililiveRecorder.Core/Templating/FileNameGenerator.cs
++++ b/BililiveRecorder.Core/Templating/FileNameGenerator.cs
+@@ -229,16 +229,27 @@ returnDefaultPath:
+             }
+         }
+ 
++        private static readonly char[] windowsInvalidFileNameChars = new[]
++        {
++            '\\', '/', ':', '*', '?', '"', '<', '>', '|',
++        };
+         private static readonly Regex invalidDirectoryNameRegex = new Regex(@"([ .])([\\\/])", RegexOptions.Compiled);
+ 
+         internal static string RemoveInvalidFileName(string input, bool ignore_slash = true)
+         {
+-            foreach (var c in Path.GetInvalidFileNameChars())
++            foreach (var c in windowsInvalidFileNameChars)
+                 if (!ignore_slash || (c != '\\' && c != '/'))
+                     input = input.Replace(c, '_');
+ 
+             input = invalidDirectoryNameRegex.Replace(input, "$1_$2");
+ 
++            var segments = input.Split(separator);
++            for (var i = 0; i < segments.Length; i++)
++            {
++                segments[i] = segments[i].TrimEnd('.', ' ');
++            }
++            input = string.Join(Path.DirectorySeparatorChar.ToString(), segments);
++
+             return input;
+         }
+ 
